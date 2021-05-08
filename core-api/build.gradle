@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group 'de.fthardy'
+version '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.7.1'
+    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.7.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.9.0'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.9.0'
+    testImplementation group: 'org.assertj', name: 'assertj-core-java8', version: '1.0.0m1'
+}
+
+test {
+    useJUnitPlatform()
+}
