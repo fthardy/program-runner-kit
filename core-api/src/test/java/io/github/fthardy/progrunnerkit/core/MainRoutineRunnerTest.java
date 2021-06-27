@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package de.fthardy.progrunnerkit.core;
+package io.github.fthardy.progrunnerkit.core;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,125 +38,125 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class StartUpRoutineRunnerTest {
+class MainRoutineRunnerTest {
     
     @Mock
-    private StartUpRoutine startUpRoutineMock;
-    
+    private MainRoutine mainRoutineMock;
+
     @Mock
-    private StartUpRoutineRunner.ExceptionHandler exceptionHandlerMock;
-    
-    private StartUpRoutineRunner runner;
+    private MainRoutineRunner.ExceptionHandler exceptionHandlerMock;
+
+    private MainRoutineRunner runner;
 
     private final ProgramStatusCodeProvider statusCodeProvider = new DefaultProgramStatusCodeProvider();
 
     private final List<String> args = Collections.emptyList();
-    
+
     @BeforeEach
     void setUp() {
-        runner = new StartUpRoutineRunner(startUpRoutineMock, exceptionHandlerMock, statusCodeProvider);
+        runner = new MainRoutineRunner(mainRoutineMock, exceptionHandlerMock, statusCodeProvider);
     }
-    
+
     @AfterEach
     void checkMocks() {
-        verifyNoMoreInteractions(startUpRoutineMock, exceptionHandlerMock);
+        verifyNoMoreInteractions(mainRoutineMock, exceptionHandlerMock);
     }
-    
+
     @Test
-    void Null_for_StartUpRoutine_is_not_allowed() {
-        assertThrows(NullPointerException.class, () -> 
-                new StartUpRoutineRunner(null, null, null));
+    void Null_for_MainRoutine_is_not_allowed() {
+        assertThrows(NullPointerException.class, () ->
+                new MainRoutineRunner(null, null, null));
     }
-    
+
     @Test
     void Null_for_ExceptionHandler_is_not_allowed() {
         assertThrows(NullPointerException.class, () ->
-                new StartUpRoutineRunner(mock(StartUpRoutine.class), null, null));
+                new MainRoutineRunner(mock(MainRoutine.class), null, null));
     }
-    
+
     @Test
     void Null_for_StatusCodeProvider_is_not_allowed() {
         assertThrows(NullPointerException.class, () ->
-                new StartUpRoutineRunner(mock(StartUpRoutine.class), mock(StartUpRoutineRunner.ExceptionHandler.class),
+                new MainRoutineRunner(mock(MainRoutine.class), mock(MainRoutineRunner.ExceptionHandler.class),
                         null));
     }
 
     @Test
     void Valid_exit_code() {
 
-        when(startUpRoutineMock.execute(args)).thenReturn(statusCodeProvider.success());
+        when(mainRoutineMock.execute(args)).thenReturn(statusCodeProvider.success());
 
         int statusCode = runner.execute(args);
         assertThat(statusCode).isEqualTo(statusCodeProvider.success());
 
-        verify(startUpRoutineMock).execute(args);
+        verify(mainRoutineMock).execute(args);
     }
 
     @Test
     void Collision_with_internal_code() {
 
-        when(startUpRoutineMock.execute(args)).thenReturn(statusCodeProvider.mainFailure());
+        when(mainRoutineMock.execute(args)).thenReturn(statusCodeProvider.startUpFailure());
 
         int statusCode = runner.execute(args);
-        assertThat(statusCode).isEqualTo(statusCodeProvider.invalidStartUpExitCode());
+        assertThat(statusCode).isEqualTo(statusCodeProvider.invalidMainExitCode());
 
-        verify(startUpRoutineMock).execute(args);
+        verify(mainRoutineMock).execute(args);
     }
 
     @Test
-    void Exception_is_thrown_Handler_returns_success() {
+    void Exception_is_thrown_Handler_returns_success_which_is_not_allowed() {
 
         RuntimeException exception = new RuntimeException("TEST!");
-        when(startUpRoutineMock.execute(args)).thenThrow(exception);
+        when(mainRoutineMock.execute(args)).thenThrow(exception);
 
-        when(exceptionHandlerMock.handleExceptionFromStartUpRoutine(exception)).thenReturn(statusCodeProvider.success());
+        when(exceptionHandlerMock.handleExceptionFromMainRoutine(exception)).thenReturn(statusCodeProvider.success());
 
         int statusCode = runner.execute(args);
-        assertThat(statusCode).isEqualTo(statusCodeProvider.success());
+        assertThat(statusCode).isEqualTo(statusCodeProvider.invalidMainFailureCode());
 
-        verify(startUpRoutineMock).execute(args);
-        verify(exceptionHandlerMock).handleExceptionFromStartUpRoutine(exception);
+        verify(mainRoutineMock).execute(args);
+        verify(exceptionHandlerMock).handleExceptionFromMainRoutine(exception);
     }
 
     @Test
-    void runStartUpRoutine_Exception_is_thrown_Handler_returns_valid_failure_code() {
+    void Exception_is_thrown_Handler_returns_valid_failure_code() {
 
         RuntimeException exception = new RuntimeException("TEST!");
-        when(startUpRoutineMock.execute(args)).thenThrow(exception);
+        when(mainRoutineMock.execute(args)).thenThrow(exception);
 
         int resultCode = 42;
-        when(exceptionHandlerMock.handleExceptionFromStartUpRoutine(exception)).thenReturn(resultCode);
+        when(exceptionHandlerMock.handleExceptionFromMainRoutine(exception)).thenReturn(resultCode);
 
         int statusCode = runner.execute(args);
         assertThat(statusCode).isEqualTo(resultCode);
 
-        verify(startUpRoutineMock).execute(args);
-        verify(exceptionHandlerMock).handleExceptionFromStartUpRoutine(exception);
+        verify(mainRoutineMock).execute(args);
+        verify(exceptionHandlerMock).handleExceptionFromMainRoutine(exception);
     }
 
     @Test
-    void runStartUpRoutine_Exception_is_thrown_Handler_Collision_with_internal_code() {
+    void Exception_is_thrown_Collision_with_internal_code() {
 
         RuntimeException exception = new RuntimeException("TEST!");
-        when(startUpRoutineMock.execute(args)).thenThrow(exception);
+        when(mainRoutineMock.execute(args)).thenThrow(exception);
 
-        when(exceptionHandlerMock.handleExceptionFromStartUpRoutine(exception)).thenReturn(statusCodeProvider.mainFailure());
+        when(exceptionHandlerMock.handleExceptionFromMainRoutine(exception)).thenReturn(statusCodeProvider.invalidStartUpExitCode());
 
         int statusCode = runner.execute(args);
-        assertThat(statusCode).isEqualTo(statusCodeProvider.invalidStartUpFailureCode());
+        assertThat(statusCode).isEqualTo(statusCodeProvider.invalidMainFailureCode());
 
-        verify(startUpRoutineMock).execute(args);
-        verify(exceptionHandlerMock).handleExceptionFromStartUpRoutine(exception);
+        verify(mainRoutineMock).execute(args);
+        verify(exceptionHandlerMock).handleExceptionFromMainRoutine(exception);
     }
 
     @Test
-    void isValidStartUpExitCode_All_valid_internal_codes() {
-        assertTrue(runner.isValidStartUpExitCode(statusCodeProvider.success()));
-        assertTrue(runner.isValidStartUpExitCode(statusCodeProvider.startUpFailure()));
+    void isValidMainExitCode_All_valid_internal_codes() {
+        assertTrue(runner.isValidMainExitCode(statusCodeProvider.success()));
+        assertTrue(runner.isValidMainExitCode(statusCodeProvider.mainFailure()));
     }
 
     @Test
-    void isValidStartUpFailureCode_All_valid_internal_codes() {
-        assertTrue(runner.isValidStartUpFailureCode(statusCodeProvider.startUpFailure()));
+    void isValidMainFailureCode_All_valid_interal_codes() {
+        assertTrue(runner.isValidMainFailureCode(statusCodeProvider.mainFailure()));
     }
 }
