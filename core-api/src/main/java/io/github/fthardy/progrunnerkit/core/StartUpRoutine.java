@@ -28,12 +28,7 @@ import java.util.List;
 /**
  * Interface definition for the programm startup routine.
  * <p>
- * It is intended to implement any kind of initialisation and/or setup functionality for a program. 
- * </p>
- * <p>
- * {@link ProgramRunner} executes the startup routine at first. If the startup routine ends with a failure the program
- * ends directly returning the status code of the startup routine. If the startup routine is successful the program 
- * flow proceeds to the {@link MainRoutine}. 
+ * Provides an entrypoint for any kind of initialisation and/or setup functionality for a program. 
  * </p>
  */
 public interface StartUpRoutine {
@@ -43,10 +38,11 @@ public interface StartUpRoutine {
      * 
      * @param inputArguments an immutable list of the input arguments.
      *                       
-     * @return an exit code which must be {@link ProgramStatusCodeProvider#success()} to indicate that the startup was
-     * successful. If the startup fails an exit code unequal to {@link ProgramStatusCodeProvider#success()} must be
-     * returned which must not collide with any of the codes from the {@link ProgramStatusCodeProvider}
-     * implementation in use except {@link ProgramStatusCodeProvider#startUpFailure()} which is allowed to be returned.
+     * @return a status code which must be equal to {@link ProgramStatusCodeProvider#success()} to indicate that the 
+     * startup routine execution was successful. If the startup routine execution fails a status code unequal to
+     * {@link ProgramStatusCodeProvider#success()} must be returned. However, the status code can be equal to
+     * {@link ProgramStatusCodeProvider#startUpFailure()} but can be any other code that doesn't collide with any other 
+     * code from {@link ProgramStatusCodeProvider}
      */
     int execute(List<String> inputArguments);
 }

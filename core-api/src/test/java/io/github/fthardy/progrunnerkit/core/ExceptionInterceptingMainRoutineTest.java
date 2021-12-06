@@ -38,15 +38,15 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class MainRoutineRunnerTest {
+class ExceptionInterceptingMainRoutineTest {
     
     @Mock
     private MainRoutine mainRoutineMock;
 
     @Mock
-    private MainRoutineRunner.ExceptionHandler exceptionHandlerMock;
+    private ExceptionInterceptingMainRoutine.ExceptionHandler exceptionHandlerMock;
 
-    private MainRoutineRunner runner;
+    private ExceptionInterceptingMainRoutine runner;
 
     private final ProgramStatusCodeProvider statusCodeProvider = new DefaultProgramStatusCodeProvider();
 
@@ -54,7 +54,7 @@ class MainRoutineRunnerTest {
 
     @BeforeEach
     void setUp() {
-        runner = new MainRoutineRunner(mainRoutineMock, exceptionHandlerMock, statusCodeProvider);
+        runner = new ExceptionInterceptingMainRoutine(mainRoutineMock, exceptionHandlerMock, statusCodeProvider);
     }
 
     @AfterEach
@@ -65,19 +65,19 @@ class MainRoutineRunnerTest {
     @Test
     void Null_for_MainRoutine_is_not_allowed() {
         assertThrows(NullPointerException.class, () ->
-                new MainRoutineRunner(null, null, null));
+                new ExceptionInterceptingMainRoutine(null, null, null));
     }
 
     @Test
     void Null_for_ExceptionHandler_is_not_allowed() {
         assertThrows(NullPointerException.class, () ->
-                new MainRoutineRunner(mock(MainRoutine.class), null, null));
+                new ExceptionInterceptingMainRoutine(mock(MainRoutine.class), null, null));
     }
 
     @Test
     void Null_for_StatusCodeProvider_is_not_allowed() {
         assertThrows(NullPointerException.class, () ->
-                new MainRoutineRunner(mock(MainRoutine.class), mock(MainRoutineRunner.ExceptionHandler.class),
+                new ExceptionInterceptingMainRoutine(mock(MainRoutine.class), mock(ExceptionInterceptingMainRoutine.ExceptionHandler.class),
                         null));
     }
 

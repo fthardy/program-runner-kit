@@ -44,9 +44,9 @@ class ShutDownRoutineTest {
     private ShutDownRoutine shutDownRoutineMock;
 
     @Mock
-    private ShutDownRoutineRunner.ExceptionHandler exceptionHandlerMock;
+    private ExceptionInterceptingShutDownRoutine.ExceptionHandler exceptionHandlerMock;
 
-    private ShutDownRoutineRunner runner;
+    private ExceptionInterceptingShutDownRoutine runner;
 
     private final ProgramStatusCodeProvider statusCodeProvider = new DefaultProgramStatusCodeProvider();
 
@@ -54,7 +54,7 @@ class ShutDownRoutineTest {
 
     @BeforeEach
     void setUp() {
-        runner = new ShutDownRoutineRunner(shutDownRoutineMock, exceptionHandlerMock, statusCodeProvider);
+        runner = new ExceptionInterceptingShutDownRoutine(shutDownRoutineMock, exceptionHandlerMock, statusCodeProvider);
     }
 
     @AfterEach
@@ -65,19 +65,19 @@ class ShutDownRoutineTest {
     @Test
     void Null_for_MainRoutine_is_not_allowed() {
         assertThrows(NullPointerException.class, () ->
-                new MainRoutineRunner(null, null, null));
+                new ExceptionInterceptingMainRoutine(null, null, null));
     }
 
     @Test
     void Null_for_ExceptionHandler_is_not_allowed() {
         assertThrows(NullPointerException.class, () ->
-                new MainRoutineRunner(mock(MainRoutine.class), null, null));
+                new ExceptionInterceptingMainRoutine(mock(MainRoutine.class), null, null));
     }
 
     @Test
     void Null_for_StatusCodeProvider_is_not_allowed() {
         assertThrows(NullPointerException.class, () ->
-                new MainRoutineRunner(mock(MainRoutine.class), mock(MainRoutineRunner.ExceptionHandler.class),
+                new ExceptionInterceptingMainRoutine(mock(MainRoutine.class), mock(ExceptionInterceptingMainRoutine.ExceptionHandler.class),
                         null));
     }
 

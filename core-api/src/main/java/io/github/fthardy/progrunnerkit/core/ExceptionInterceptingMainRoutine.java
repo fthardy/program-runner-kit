@@ -27,17 +27,15 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A proxy implementation of a main routine which intercepts any kind of {@link RuntimeException} and validates 
- * the returned status code of the proxid main routine.
- *
- * @see StartUpRoutineRunner.ExceptionHandler
+ * A proxy implementation for a main routine which intercepts any kind of {@link RuntimeException} and validates 
+ * the returned status code of the proxied main routine.
  */
-public class MainRoutineRunner implements MainRoutine {
+public class ExceptionInterceptingMainRoutine implements MainRoutine {
 
     /**
-     * The interface definition for an exception handler used by a {@link MainRoutineRunner}.
+     * The interface definition for an exception handler used by a {@link ExceptionInterceptingMainRoutine}.
      * 
-     * @see MainRoutineRunner
+     * @see ExceptionInterceptingMainRoutine
      */
     public interface ExceptionHandler {
 
@@ -64,7 +62,7 @@ public class MainRoutineRunner implements MainRoutine {
      * @param exceptionHandler the exception handler.
      * @param statusCodeProvider the status code provider.
      */
-    public MainRoutineRunner(
+    public ExceptionInterceptingMainRoutine(
             MainRoutine mainRoutine, ExceptionHandler exceptionHandler, ProgramStatusCodeProvider statusCodeProvider) {
         this.mainRoutine = Objects.requireNonNull(mainRoutine);
         this.exceptionHandler = Objects.requireNonNull(exceptionHandler);

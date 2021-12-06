@@ -27,17 +27,15 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A proxy implementation of a startup routine which intercepts any kind of {@link RuntimeException} and validates 
- * the returned status code of the proxid startup routine.
- * 
- * @see ExceptionHandler
+ * A proxy implementation for a startup routine which intercepts any kind of {@link RuntimeException} and validates 
+ * the returned status code of the proxied startup routine.
  */
-public class StartUpRoutineRunner implements StartUpRoutine {
+public class ExceptionInterceptingStartupRoutine implements StartUpRoutine {
 
     /**
-     * The interface definition for an exception handler used by a {@link StartUpRoutineRunner}.
+     * The interface definition for an exception handler used by a {@link ExceptionInterceptingStartupRoutine}.
      * 
-     * @see StartUpRoutineRunner
+     * @see ExceptionInterceptingStartupRoutine
      */
     public interface ExceptionHandler {
 
@@ -64,7 +62,7 @@ public class StartUpRoutineRunner implements StartUpRoutine {
      * @param exceptionHandler the exception handler instance.
      * @param statusCodeProvider the status code provider.
      */
-    public StartUpRoutineRunner(
+    public ExceptionInterceptingStartupRoutine(
             StartUpRoutine startUpRoutine,
             ExceptionHandler exceptionHandler,
             ProgramStatusCodeProvider statusCodeProvider) {

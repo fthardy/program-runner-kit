@@ -42,7 +42,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(JUnitPlatform.class)
-class ProgramRunnerTest {
+class DefaultDelegatingMainRoutineTest {
     
     @Mock
     private StartUpRoutine startUpRoutineMock;
@@ -55,12 +55,12 @@ class ProgramRunnerTest {
     
     private final ProgramStatusCodeProvider statusCodeProvider = new DefaultProgramStatusCodeProvider();
 
-    private ProgramRunner runner;
+    private DefaultDelegatingMainRoutine runner;
     
     @BeforeEach
     void setUp() {
-        this.runner = new ProgramRunner(
-                args, startUpRoutineMock, mainRoutineMock, shutDownRoutineMock, statusCodeProvider);
+        this.runner = new DefaultDelegatingMainRoutine(
+                startUpRoutineMock, mainRoutineMock, shutDownRoutineMock, statusCodeProvider);
     }
 
     @AfterEach
@@ -70,20 +70,20 @@ class ProgramRunnerTest {
 
     @Test
     void Input_arguments_list_is_mandatory() {
-        assertThrows(NullPointerException.class, () -> new ProgramRunner(
-                null, null, null, null, null));
+        assertThrows(NullPointerException.class, () -> new DefaultDelegatingMainRoutine(
+                null, null, null, null));
     }
     
     @Test
     void Main_routine_is_mandatory() {
-        assertThrows(IllegalStateException.class, () -> new ProgramRunner(
-                args, null, null, null,null));
+        assertThrows(NullPointerException.class, () -> new DefaultDelegatingMainRoutine(
+                null, null, null, null));
     }
     
     @Test
     void Status_code_provider_is_mandatory() {
-        assertThrows(NullPointerException.class, () -> new ProgramRunner(
-                args, null, mainRoutineMock, null, null));
+        assertThrows(NullPointerException.class, () -> new DefaultDelegatingMainRoutine(
+                null, mainRoutineMock, null, null));
     }
     
     @Test
@@ -92,8 +92,8 @@ class ProgramRunnerTest {
         int resultCode = 42;
         when(mainRoutineMock.execute(args)).thenReturn(resultCode);
 
-        int statusCode = new ProgramRunner(
-                args, null, mainRoutineMock, null, statusCodeProvider).runProgram();
+        int statusCode = new DefaultDelegatingMainRoutine(
+                null, mainRoutineMock, null, statusCodeProvider).execute(args);
         assertThat(statusCode).isEqualTo(resultCode);
 
         verify(mainRoutineMock).execute(args);
@@ -106,8 +106,8 @@ class ProgramRunnerTest {
         when(startUpRoutineMock.execute(args)).thenReturn(statusCodeProvider.success());
         when(mainRoutineMock.execute(args)).thenReturn(resultCode);
 
-        int statusCode =
-                new ProgramRunner(args, startUpRoutineMock, mainRoutineMock, null, statusCodeProvider).runProgram();
+        int statusCode = new DefaultDelegatingMainRoutine(
+                startUpRoutineMock, mainRoutineMock, null, statusCodeProvider).execute(args);
         assertThat(statusCode).isEqualTo(resultCode);
 
         InOrder callOrder = inOrder(startUpRoutineMock, mainRoutineMock);
@@ -121,7 +121,7 @@ class ProgramRunnerTest {
         int resultCode = 42;
         when(startUpRoutineMock.execute(args)).thenReturn(resultCode);
 
-        int statusCode = runner.runProgram();
+        int statusCode = runner.execute(args);
         assertThat(statusCode).isEqualTo(resultCode);
 
         InOrder callOrder = inOrder(startUpRoutineMock, mainRoutineMock);
@@ -137,7 +137,7 @@ class ProgramRunnerTest {
         when(mainRoutineMock.execute(args)).thenReturn(resultCode);
         when(shutDownRoutineMock.execute(args, resultCode)).thenReturn(statusCodeProvider.success());
 
-        int statusCode = runner.runProgram();
+        int statusCode = runner.execute(args);
         assertThat(statusCode).isEqualTo(statusCodeProvider.success());
 
         InOrder callOrder = inOrder(mainRoutineMock, shutDownRoutineMock);

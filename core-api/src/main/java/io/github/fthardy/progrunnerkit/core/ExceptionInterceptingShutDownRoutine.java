@@ -27,17 +27,15 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A proxy implementation of a shutdown routine which intercepts any kind of {@link RuntimeException} and validates 
- * the returned status code of the proxid shutdown routine.
- *
- * @see StartUpRoutineRunner.ExceptionHandler
+ * A proxy implementation for a shutdown routine which intercepts any kind of {@link RuntimeException} and validates 
+ * the returned status code of the proxied shutdown routine.
  */
-public class ShutDownRoutineRunner implements ShutDownRoutine {
+public class ExceptionInterceptingShutDownRoutine implements ShutDownRoutine {
 
     /**
-     * The interface definition for an exception handler used by a {@link ShutDownRoutineRunner}.
+     * The interface definition for an exception handler used by a {@link ExceptionInterceptingShutDownRoutine}.
      *
-     * @see ShutDownRoutineRunner
+     * @see ExceptionInterceptingShutDownRoutine
      */
     public interface ExceptionHandler {
 
@@ -46,7 +44,7 @@ public class ShutDownRoutineRunner implements ShutDownRoutine {
          *
          * @param exception the thrown exception.
          *
-         * @return an exit code which might be a {@link ProgramStatusCodeProvider#success()}. In this case {@link ProgramRunner} will return the code which was the
+         * @return an exit code which might be a {@link ProgramStatusCodeProvider#success()}. In this case {@link DefaultDelegatingMainRoutine} will return the code which was the
          * outcome of the main routine execution. In any other case a failure code has to be returned that must not collide with any of the internal status codes
          * defined by the {@link ProgramStatusCodeProvider} implementation in use execept of {@link ProgramStatusCodeProvider#shutDownFailure()}.
          */
@@ -64,7 +62,7 @@ public class ShutDownRoutineRunner implements ShutDownRoutine {
      * @param exceptionHandler the exception handler.
      * @param statusCodeProvider the status code provider.
      */
-    public ShutDownRoutineRunner(
+    public ExceptionInterceptingShutDownRoutine(
             ShutDownRoutine shutDownRoutine, ExceptionHandler exceptionHandler, ProgramStatusCodeProvider statusCodeProvider) {
         this.shutDownRoutine = Objects.requireNonNull(shutDownRoutine);
         this.exceptionHandler = Objects.requireNonNull(exceptionHandler);

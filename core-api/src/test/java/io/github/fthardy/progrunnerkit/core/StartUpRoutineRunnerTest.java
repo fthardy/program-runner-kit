@@ -44,9 +44,9 @@ class StartUpRoutineRunnerTest {
     private StartUpRoutine startUpRoutineMock;
     
     @Mock
-    private StartUpRoutineRunner.ExceptionHandler exceptionHandlerMock;
+    private ExceptionInterceptingStartupRoutine.ExceptionHandler exceptionHandlerMock;
     
-    private StartUpRoutineRunner runner;
+    private ExceptionInterceptingStartupRoutine runner;
 
     private final ProgramStatusCodeProvider statusCodeProvider = new DefaultProgramStatusCodeProvider();
 
@@ -54,7 +54,7 @@ class StartUpRoutineRunnerTest {
     
     @BeforeEach
     void setUp() {
-        runner = new StartUpRoutineRunner(startUpRoutineMock, exceptionHandlerMock, statusCodeProvider);
+        runner = new ExceptionInterceptingStartupRoutine(startUpRoutineMock, exceptionHandlerMock, statusCodeProvider);
     }
     
     @AfterEach
@@ -65,19 +65,19 @@ class StartUpRoutineRunnerTest {
     @Test
     void Null_for_StartUpRoutine_is_not_allowed() {
         assertThrows(NullPointerException.class, () -> 
-                new StartUpRoutineRunner(null, null, null));
+                new ExceptionInterceptingStartupRoutine(null, null, null));
     }
     
     @Test
     void Null_for_ExceptionHandler_is_not_allowed() {
         assertThrows(NullPointerException.class, () ->
-                new StartUpRoutineRunner(mock(StartUpRoutine.class), null, null));
+                new ExceptionInterceptingStartupRoutine(mock(StartUpRoutine.class), null, null));
     }
     
     @Test
     void Null_for_StatusCodeProvider_is_not_allowed() {
         assertThrows(NullPointerException.class, () ->
-                new StartUpRoutineRunner(mock(StartUpRoutine.class), mock(StartUpRoutineRunner.ExceptionHandler.class),
+                new ExceptionInterceptingStartupRoutine(mock(StartUpRoutine.class), mock(ExceptionInterceptingStartupRoutine.ExceptionHandler.class),
                         null));
     }
 

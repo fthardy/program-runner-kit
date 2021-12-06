@@ -28,15 +28,8 @@ import java.util.List;
 /**
  * Interface definition for the program shutdown routine.
  * <p>
- * It is intended to implement any kind of tear down or cleanup functionality for a program.
+ * Provides an entrypoint for any kind of tear down or cleanup functionality for a program.
  * </p>
- * <p>
- * {@link ProgramRunner} executes the shutdown routine at last after the main routine has finished independent from its 
- * outcome (success or failure). If the shutdown routine ends with a failure the program will return the exit code as
- * status code. 
- * </p>
- * 
- * @see ProgramRunner
  */
 public interface ShutDownRoutine {
 
@@ -46,10 +39,11 @@ public interface ShutDownRoutine {
      * @param inputArguments an immutable list of the input arguments.
      * @param exitCodeFromMain the exit code from the main routine.
      *
-     * @return an exit code which must be {@link ProgramStatusCodeProvider#success()} to indicate that the shutdown was
-     * successful. If the shutdown fails an exit code unequal to {@link ProgramStatusCodeProvider#success()} must be
-     * returned which must not collide with any of the codes from the {@link ProgramStatusCodeProvider}
-     * implementation in use except {@link ProgramStatusCodeProvider#shutDownFailure()} which is allowed to be returned.
+     * @return a status code which must be equal to {@link ProgramStatusCodeProvider#success()} to indicate that the 
+     * shutdown routine execution was successful. If the shutdown routine execution fails a status code unequal to
+     * {@link ProgramStatusCodeProvider#success()} must be returned. However, the status code can be equal to
+     * {@link ProgramStatusCodeProvider#shutDownFailure()} ()} but can be any other code that doesn't collide with any
+     * other code from {@link ProgramStatusCodeProvider}
      */
     int execute(List<String> inputArguments, int exitCodeFromMain);
 }

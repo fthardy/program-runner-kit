@@ -31,8 +31,6 @@ import java.util.Set;
  * Make sure that only one particular implementation of this status code provider is used in context of a program 
  * runner execution. 
  * </p>
- * 
- * @see ProgramRunner
  */
 public interface ProgramStatusCodeProvider {
 
