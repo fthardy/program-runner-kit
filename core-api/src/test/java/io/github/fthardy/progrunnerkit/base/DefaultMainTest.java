@@ -20,29 +20,19 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
-package io.github.fthardy.progrunnerkit.core;
+*/
+package io.github.fthardy.progrunnerkit.base;
 
-import java.util.List;
+import org.junit.jupiter.api.Test;
 
-/**
- * Interface definition for the programm startup routine.
- * <p>
- * Provides an entrypoint for any kind of initialisation and/or setup functionality for a program. 
- * </p>
- */
-public interface StartUpRoutine {
+import static org.junit.jupiter.api.Assertions.*;
 
-    /**
-     * Executes the startup routine of the program.
-     * 
-     * @param inputArguments an immutable list of the input arguments.
-     *                       
-     * @return a status code which must be equal to {@link ProgramStatusCodeProvider#success()} to indicate that the 
-     * startup routine execution was successful. If the startup routine execution fails a status code unequal to
-     * {@link ProgramStatusCodeProvider#success()} must be returned. However, the status code can be equal to
-     * {@link ProgramStatusCodeProvider#startUpFailure()} but can be any other code that doesn't collide with any other 
-     * code from {@link ProgramStatusCodeProvider}
-     */
-    int execute(List<String> inputArguments);
+class DefaultMainTest {
+
+    @Test
+    void Should_load_implemenation_instance() {
+        InitialProgramProviderServiceForTesting.statusCodeToReturn = 42;
+        int exitCode = DefaultMain.startProgram(new String[] {"foo"});
+        assertEquals(InitialProgramProviderServiceForTesting.statusCodeToReturn, exitCode);
+    }
 }

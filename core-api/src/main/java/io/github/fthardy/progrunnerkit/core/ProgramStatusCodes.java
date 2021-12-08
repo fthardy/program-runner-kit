@@ -23,26 +23,18 @@ SOFTWARE.
  */
 package io.github.fthardy.progrunnerkit.core;
 
-import java.util.List;
-
 /**
- * Interface definition for the program main routine.
+ * The definition of the interface for a provider which supplies all internally used status codes.
  * <p>
- * Provides an entrypoint for the main functionality of a program.
+ * Make sure that only one particular implementation of this status code provider is used in context of a program execution. 
  * </p>
  */
-public interface MainRoutine {
+public interface ProgramStatusCodes {
 
     /**
-     * Executes the main routine of the program.
-     * 
-     * @param inputArguments an immutable list of the input arguments.
-     *
-     * @return a status code which must be equal to {@link ProgramStatusCodeProvider#success()} to indicate a 
-     * successful execution. If the main routine execution fails a status code which is not equal to
-     * {@link ProgramStatusCodeProvider#success()} must be returned. However, the status code can be equal to 
-     * {@link ProgramStatusCodeProvider#mainFailure()} but can be any other code thatdoesn't collide with any other code
-     * from {@link ProgramStatusCodeProvider}.
+     * @return the status code for success which is (and should be usually) by default 0. 
      */
-    int execute(List<String> inputArguments);
+    default int success() {
+        return 0;
+    }
 }
