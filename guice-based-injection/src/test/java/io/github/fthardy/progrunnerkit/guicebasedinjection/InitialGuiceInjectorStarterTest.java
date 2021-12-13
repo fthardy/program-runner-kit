@@ -20,23 +20,32 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
-package io.github.fthardy.progrunnerkit.core;
+*/
+package io.github.fthardy.progrunnerkit.guicebasedinjection;
 
-/**
- * Interface definition for an entry point of a program part.
- * <p>
- * A program part is intended to implement a particular task of a program where a program can consist of several different parts. 
- * </p>
- */
-public interface ProgramPartEntryPoint {
+import io.github.fthardy.progrunnerkit.base.BaseMain;
+import io.github.fthardy.progrunnerkit.core.BasicProgramExecutionContext;
+import org.junit.jupiter.api.Test;
 
-    /**
-     * Executes the program part represented by the receiving object instance.
-     * 
-     * @param context the program execution context.
-     *
-     * @return a status code.
-     */
-    int execute(ProgramExecutionContext context);
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class InitialGuiceInjectorStarterTest {
+
+    @Test
+    void startGuiceBasedProgram() {
+
+        int exitCode = BaseMain.startProgram(new String[]{});
+        assertEquals(42, exitCode);
+    }
+    
+    @Test
+    void No_implemenations_found() {
+
+        InitialGuiceInjectorStarter starter = new InitialGuiceInjectorStarter();
+        
+        assertThrows(IllegalStateException.class, () -> 
+                starter.createInjectorAndStartProgramEntryPoint(Collections.emptyList(), new BasicProgramExecutionContext(new String[] {}, null)));
+    }
 }

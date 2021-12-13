@@ -1,0 +1,4 @@
+rootProject.name = "ProgrammRunnerKit"
+
+// The project names/paths are defined in gradle.properties - for a new subproject add a new property there and include it here 
+include coreApiProject, baseProject, guiceBasedInjectionProject

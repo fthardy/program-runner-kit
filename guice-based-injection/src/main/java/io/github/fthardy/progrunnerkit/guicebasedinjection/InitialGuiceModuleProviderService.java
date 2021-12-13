@@ -20,23 +20,26 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
-package io.github.fthardy.progrunnerkit.core;
+*/
+package io.github.fthardy.progrunnerkit.guicebasedinjection;
+
+import com.google.inject.Module;
 
 /**
- * Interface definition for an entry point of a program part.
+ * Defines the interface for a provider service which provides a Guice-Module instance for the initial Guice-Injector created by the
+ * {@link InitialGuiceInjectorStarter}.
  * <p>
- * A program part is intended to implement a particular task of a program where a program can consist of several different parts. 
+ * Is is possible to define several implementations of this interface where each returns a different module. However, any of the module has to provide a
+ * binding for an implementation of {@link GuiceBasedInjectionRootEntryPoint}.
  * </p>
+ * 
+ * @see InitialGuiceInjectorStarter
+ * @see GuiceBasedInjectionRootEntryPoint
  */
-public interface ProgramPartEntryPoint {
+public interface InitialGuiceModuleProviderService {
 
     /**
-     * Executes the program part represented by the receiving object instance.
-     * 
-     * @param context the program execution context.
-     *
-     * @return a status code.
+     * @return a Guice-Module instance.
      */
-    int execute(ProgramExecutionContext context);
+    Module createInitialGuiceModule();
 }

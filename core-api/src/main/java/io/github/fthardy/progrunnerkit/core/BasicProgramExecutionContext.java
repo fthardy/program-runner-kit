@@ -23,50 +23,35 @@ SOFTWARE.
  */
 package io.github.fthardy.progrunnerkit.core;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * An extendable base implemenation of the program execution context.
  */
 public class BasicProgramExecutionContext implements ProgramExecutionContext {
     
-    private final ProgramStatusCodes statusCodeProvider;
     private final List<String> commandLineInputArguments;
     private final Integer statusCode;
 
     /**
      * Create a new instance of this execution context.
      *
-     * @param statusCodeProvider the status code provider implementation.
      * @param commandLineArguments the command line arguments.
      * @param statusCode a status code or {@code null}.
      */
-    public BasicProgramExecutionContext(ProgramStatusCodes statusCodeProvider, List<String> commandLineArguments, Integer statusCode) {
-        this.statusCodeProvider = Objects.requireNonNull(statusCodeProvider, "Undefined status code provider!");
-        this.commandLineInputArguments = commandLineArguments;
+    public BasicProgramExecutionContext(List<String> commandLineArguments, Integer statusCode) {
+        this.commandLineInputArguments = Collections.unmodifiableList(new ArrayList<>(commandLineArguments));
         this.statusCode = statusCode;
     }
     
     /**
      * Create a new instance of this execution context.
      * 
-     * @param statusCodeProvider the status code provider implementation.
      * @param commandLineArguments the command line arguments.
      * @param statusCode a status code or {@code null}.
      */
-    public BasicProgramExecutionContext(ProgramStatusCodes statusCodeProvider, String[] commandLineArguments, Integer statusCode) {
-        this(
-                statusCodeProvider, 
-                Arrays.asList(Objects.requireNonNull(commandLineArguments, "Undefined command line arguments! Provide at least an empty array.")),
-                statusCode);
-    }
-
-    @Override
-    public ProgramStatusCodes getStatusCodeProvider() {
-        return this.statusCodeProvider;
+    public BasicProgramExecutionContext(String[] commandLineArguments, Integer statusCode) {
+        this(Arrays.asList(Objects.requireNonNull(commandLineArguments, "Undefined command line arguments! Provide at least an empty array.")), statusCode);
     }
 
     @Override
@@ -75,12 +60,12 @@ public class BasicProgramExecutionContext implements ProgramExecutionContext {
     }
 
     @Override
-    public Optional<Integer> getStatusCode() {
+    public Optional<Integer> getLastStatusCode() {
         return Optional.ofNullable(this.statusCode);
     }
 
     @Override
-    public ProgramExecutionContext createNewWithStatusCode(Integer statusCode) {
-        return new BasicProgramExecutionContext(this.statusCodeProvider, this.commandLineInputArguments, statusCode);
+    public ProgramExecutionContext createNewInstanceWithStatusCode(Integer statusCode) {
+        return new BasicProgramExecutionContext(this.commandLineInputArguments, statusCode);
     }
 }

@@ -20,23 +20,20 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
-package io.github.fthardy.progrunnerkit.core;
+*/
+package io.github.fthardy.progrunnerkit.guicebasedinjection;
+
+import io.github.fthardy.progrunnerkit.core.ProgramPartEntryPoint;
 
 /**
- * Interface definition for an entry point of a program part.
+ * A marker type for a program entry point which is managed by a Guice-Injector.
  * <p>
- * A program part is intended to implement a particular task of a program where a program can consist of several different parts. 
+ * An implementation should be typically a singleton (not a must) and must be provided in a Guice-Module binding where that Guice-Module has to be created and
+ * provided by a {@link InitialGuiceModuleProviderService} implementation.
  * </p>
+ * 
+ * @see InitialGuiceModuleProviderService
  */
-public interface ProgramPartEntryPoint {
-
-    /**
-     * Executes the program part represented by the receiving object instance.
-     * 
-     * @param context the program execution context.
-     *
-     * @return a status code.
-     */
-    int execute(ProgramExecutionContext context);
+public interface GuiceBasedInjectionRootEntryPoint extends ProgramPartEntryPoint {
+    // actually no further method definitions.
 }

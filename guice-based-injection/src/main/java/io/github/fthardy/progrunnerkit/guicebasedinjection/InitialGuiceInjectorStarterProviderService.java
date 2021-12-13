@@ -20,23 +20,27 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
-package io.github.fthardy.progrunnerkit.core;
+*/
+package io.github.fthardy.progrunnerkit.guicebasedinjection;
+
+import io.github.fthardy.progrunnerkit.base.AbstractInitialProgramProviderService;
+import io.github.fthardy.progrunnerkit.core.ProgramPartEntryPoint;
 
 /**
- * Interface definition for an entry point of a program part.
+ * An implementation for a {@link io.github.fthardy.progrunnerkit.base.InitialProgramProviderService} which is used by
+ * {@link io.github.fthardy.progrunnerkit.base.BaseMain}.
  * <p>
- * A program part is intended to implement a particular task of a program where a program can consist of several different parts. 
+ * You might decide to use {@link io.github.fthardy.progrunnerkit.base.BaseMain} as your main program starter than you can put the FQN of this class into a
+ * service-provider configuration file for {@link io.github.fthardy.progrunnerkit.base.InitialProgramProviderService}.
+ * </p>
+ * <p>
+ * This implementation creates an instance of {@link InitialGuiceInjectorStarter}.
  * </p>
  */
-public interface ProgramPartEntryPoint {
-
-    /**
-     * Executes the program part represented by the receiving object instance.
-     * 
-     * @param context the program execution context.
-     *
-     * @return a status code.
-     */
-    int execute(ProgramExecutionContext context);
+public final class InitialGuiceInjectorStarterProviderService extends AbstractInitialProgramProviderService {
+    
+    @Override
+    public ProgramPartEntryPoint getProgramRootEntryPointImpl() {
+        return new InitialGuiceInjectorStarter();
+    }
 }

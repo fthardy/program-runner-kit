@@ -20,23 +20,19 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
-package io.github.fthardy.progrunnerkit.core;
+*/
+package io.github.fthardy.progrunnerkit.base;
 
-/**
- * Interface definition for an entry point of a program part.
- * <p>
- * A program part is intended to implement a particular task of a program where a program can consist of several different parts. 
- * </p>
- */
-public interface ProgramPartEntryPoint {
+import org.junit.jupiter.api.Test;
 
-    /**
-     * Executes the program part represented by the receiving object instance.
-     * 
-     * @param context the program execution context.
-     *
-     * @return a status code.
-     */
-    int execute(ProgramExecutionContext context);
+import static org.junit.jupiter.api.Assertions.*;
+
+class BaseMainTest {
+
+    @Test
+    void Should_load_implemenation_instance() {
+        InitialProgramProviderServiceForTesting.statusCodeToReturn = 42;
+        int exitCode = BaseMain.startProgram(new String[] {"foo"});
+        assertEquals(InitialProgramProviderServiceForTesting.statusCodeToReturn, exitCode);
+    }
 }

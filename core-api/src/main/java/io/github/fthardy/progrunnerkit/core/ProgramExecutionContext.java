@@ -29,32 +29,27 @@ import java.util.Optional;
 /**
  * Interface definition for a program execution context.
  * <p>
- * Provides the input arguments from the command line and a status code from a previously executed part. 
+ * Provides the status code provider, the input arguments from the command line and the status code from a previously executed part. 
  * </p>
  */
 public interface ProgramExecutionContext {
 
     /**
-     * @return the status code provider implemenation.
-     */
-    ProgramStatusCodes getStatusCodeProvider();
-
-    /**
-     * @return the input arguments from the command line.
+     * @return the immutable list of the input arguments from the command line.
      */
     List<String> getCommandLineInputArguments();
 
     /**
-     * @return an optional which contains the status code of a previously executed program part. If there is no status code the optional is empty.
+     * @return an optional which contains the status code returned by a previously executed program part. If there is no status code the optional is empty.
      */
-    Optional<Integer> getStatusCode();
+    Optional<Integer> getLastStatusCode();
 
     /**
-     * Creates a new context instance from the receiving context instance with a different (previous) status code.
+     * Creates a new context instance from the receiving context instance with a new last status code.
      * 
      * @param statusCode the new status code.
      *                   
      * @return the new context instance.
      */
-    ProgramExecutionContext createNewWithStatusCode(Integer statusCode);
+    ProgramExecutionContext createNewInstanceWithStatusCode(Integer statusCode);
 }
