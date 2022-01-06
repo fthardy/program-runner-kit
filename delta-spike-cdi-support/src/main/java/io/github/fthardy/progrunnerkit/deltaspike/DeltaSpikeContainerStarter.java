@@ -23,8 +23,7 @@ SOFTWARE.
 */
 package io.github.fthardy.progrunnerkit.deltaspike;
 
-import io.github.fthardy.progrunnerkit.core.ProgramExecutionContext;
-import io.github.fthardy.progrunnerkit.core.ProgramPartEntryPoint;
+import io.github.fthardy.progrunnerkit.core.CommandLineExecutor;
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
 import org.apache.deltaspike.core.api.provider.BeanProvider;
@@ -34,23 +33,23 @@ import javax.enterprise.util.AnnotationLiteral;
 /**
  * A program entry point implemenation which handles the start and stop of a CDI-Container through DeltaSpikes Container-Control-Module.
  * <p>
- * On execute the CDI-Container is booted. Then an instance of a {@link ProgramPartEntryPoint} annotated with {@link CdiEnabledEntryPoint} is obtained from the
+ * On execute the CDI-Container is booted. Then an instance of a {@link CommandLineExecutor} annotated with {@link CdiEnabledEntryPoint} is obtained from the
  * container. The execution is then delegated to this instance. When the calling thread returns the container is shut down.
  * </p>
  */
-public final class DeltaSpikeContainerStarter implements ProgramPartEntryPoint {
+public final class DeltaSpikeContainerStarter implements CommandLineExecutor {
     
     private static final class CdiEnabledEntryPointLiteral extends AnnotationLiteral<CdiEnabledEntryPoint> implements CdiEnabledEntryPoint {};
     
     @Override
-    public int execute(ProgramExecutionContext context) {
+    public int execute(String[] args) {
         
         CdiContainer cdiContainer = CdiContainerLoader.getCdiContainer();
         cdiContainer.boot();
 
         try {
             // Let the injection magic happen.
-            return BeanProvider.getContextualReference(ProgramPartEntryPoint.class, false, new CdiEnabledEntryPointLiteral()).execute(context);
+            return BeanProvider.getContextualReference(CommandLineExecutor.class, false, new CdiEnabledEntryPointLiteral()).execute(args);
         } finally {
             cdiContainer.shutdown();
         }

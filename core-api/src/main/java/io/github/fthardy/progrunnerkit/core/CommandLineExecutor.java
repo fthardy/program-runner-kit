@@ -24,19 +24,20 @@ SOFTWARE.
 package io.github.fthardy.progrunnerkit.core;
 
 /**
- * Interface definition for an entry point of a program part.
+ * Interface definition for a command line executor.
  * <p>
- * A program part is intended to implement a particular task of a program where a program can consist of several different parts. 
+ * A command line executor represents an entry point for a program. It takes the argument values from the command line and returns a status code.
+ * The status code is meant to be used by the caller of the command line executor as an exit code for the program.
  * </p>
  */
-public interface ProgramPartEntryPoint {
+public interface CommandLineExecutor {
 
     /**
      * Executes the program part represented by the receiving object instance.
      * 
-     * @param context the program execution context.
+     * @param args the command line arguments.
      *
      * @return a status code.
      */
-    int execute(ProgramExecutionContext context);
+    int execute(String[] args);
 }

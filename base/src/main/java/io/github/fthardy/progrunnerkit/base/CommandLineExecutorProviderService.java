@@ -23,35 +23,24 @@ SOFTWARE.
  */
 package io.github.fthardy.progrunnerkit.base;
 
-import io.github.fthardy.progrunnerkit.core.ProgramExecutionContext;
-import io.github.fthardy.progrunnerkit.core.ProgramPartEntryPoint;
+import io.github.fthardy.progrunnerkit.core.CommandLineExecutor;
 
 /**
- * A service provider interface definition which provides the initial components for a program.
+ * A service provider interface definition which provides the command line executor which serves as the main entry point for a program.
  * <p>
  * An implementation of this interface is intended to be bound by a service-provider configuration for a {@link java.util.ServiceLoader}.
  * </p>
  * <p>
- * Provides a {@link ProgramPartEntryPoint} implemenation which implements the program main functionality. The intention is that this entry point is invoked by
- * a main-method. Additionally this provider allows for the creation of a {@link ProgramExecutionContext} which is required for the invokation of the entry
- * point.  
+ * Provides a {@link CommandLineExecutor} implemenation which implements the program main functionality. The intention is that this entry point is invoked by
+ * a main-method.
  * </p>
  * 
  * @see BaseMain
  */
-public interface InitialProgramProviderService {
+public interface CommandLineExecutorProviderService {
 
     /**
-     * @return the root entry point implementation for the program.
+     * @return the command line executor implemenation which serves as the root entry point for the program.
      */
-    ProgramPartEntryPoint getProgramRootEntryPointImpl();
-
-    /**
-     * Create the initial program execution context.
-     * 
-     * @param commandLineArguments the command line arguments.
-     *                             
-     * @return the program execution context.
-     */
-    ProgramExecutionContext createInitialProgramExecutionContext(String[] commandLineArguments);
+    CommandLineExecutor getCommandLineExecutorImpl();
 }

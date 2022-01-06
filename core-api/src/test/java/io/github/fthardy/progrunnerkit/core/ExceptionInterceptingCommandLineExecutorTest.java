@@ -21,10 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package io.github.fthardy.progrunnerkit.base;
+package io.github.fthardy.progrunnerkit.core;
 
-import io.github.fthardy.progrunnerkit.core.ProgramExecutionContext;
-import io.github.fthardy.progrunnerkit.core.ProgramPartEntryPoint;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,42 +34,41 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ExceptionInterceptingProgramPartEntryPointTest {
+class ExceptionInterceptingCommandLineExecutorTest {
     
     @Mock
-    private ProgramPartEntryPoint delegateMock;
+    private CommandLineExecutor delegateMock;
 
     @Mock
-    private ExceptionInterceptingProgramPartEntryPoint.ExceptionHandler exceptionHandlerMock;
-    
-    @Mock
-    private ProgramExecutionContext contextMock;
+    private ExceptionInterceptingCommandLineExecutor.ExceptionHandler exceptionHandlerMock;
 
-    private ExceptionInterceptingProgramPartEntryPoint proxy;
+    private ExceptionInterceptingCommandLineExecutor proxy;
 
     @BeforeEach
     void setUp() {
-        this.proxy = new ExceptionInterceptingProgramPartEntryPoint(this.delegateMock, this.exceptionHandlerMock);
+        this.proxy = new ExceptionInterceptingCommandLineExecutor(this.delegateMock, this.exceptionHandlerMock);
     }
 
     @AfterEach
     void checkMocks() {
-        verifyNoMoreInteractions(this.delegateMock, this.exceptionHandlerMock, this.contextMock);
+        verifyNoMoreInteractions(this.delegateMock, this.exceptionHandlerMock);
     }
     
     @Test
     void Delegate_returns_with_no_exception() {
+        String[] args = new String[] {};
         int exitCodeToReturn = 0;
-        when(this.delegateMock.execute(this.contextMock)).thenReturn(exitCodeToReturn);
-        assertThat(this.proxy.execute(this.contextMock)).isEqualTo(exitCodeToReturn);
+        when(this.delegateMock.execute(args)).thenReturn(exitCodeToReturn);
+        assertThat(this.proxy.execute(args)).isEqualTo(exitCodeToReturn);
     }
     
     @Test
     void Delegate_throws_exception() {
+        String[] args = new String[] {};
         int exitCodeToReturn = 0;
         RuntimeException exception = new RuntimeException("TEST");
-        when(this.delegateMock.execute(this.contextMock)).thenThrow(exception);
-        when(this.exceptionHandlerMock.handleExceptionFromMainRoutine(exception)).thenReturn(exitCodeToReturn);
-        assertThat(this.proxy.execute(this.contextMock)).isEqualTo(exitCodeToReturn);
+        when(this.delegateMock.execute(args)).thenThrow(exception);
+        when(this.exceptionHandlerMock.handleException(exception)).thenReturn(exitCodeToReturn);
+        assertThat(this.proxy.execute(args)).isEqualTo(exitCodeToReturn);
     } 
 }

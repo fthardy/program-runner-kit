@@ -23,16 +23,27 @@ SOFTWARE.
 */
 package io.github.fthardy.progrunnerkit.base;
 
+import io.github.fthardy.progrunnerkit.core.CommandLineExecutor;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BaseMainTest {
 
+    public static final class CommandLineExecutorProviderServiceTestImpl implements CommandLineExecutorProviderService {
+        
+        static int statusCodeToReturn = 0;
+        
+        @Override
+        public CommandLineExecutor getCommandLineExecutorImpl() {
+            return context -> statusCodeToReturn;
+        }
+    }
+
     @Test
     void Should_load_implemenation_instance() {
-        InitialProgramProviderServiceForTesting.statusCodeToReturn = 42;
+        CommandLineExecutorProviderServiceTestImpl.statusCodeToReturn = 42;
         int exitCode = BaseMain.startProgram(new String[] {"foo"});
-        assertEquals(InitialProgramProviderServiceForTesting.statusCodeToReturn, exitCode);
+        assertEquals(CommandLineExecutorProviderServiceTestImpl.statusCodeToReturn, exitCode);
     }
 }

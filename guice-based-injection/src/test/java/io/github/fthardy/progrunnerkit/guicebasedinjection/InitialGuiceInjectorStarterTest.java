@@ -24,7 +24,6 @@ SOFTWARE.
 package io.github.fthardy.progrunnerkit.guicebasedinjection;
 
 import io.github.fthardy.progrunnerkit.base.BaseMain;
-import io.github.fthardy.progrunnerkit.core.BasicProgramExecutionContext;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -46,6 +45,6 @@ class InitialGuiceInjectorStarterTest {
         InitialGuiceInjectorStarter starter = new InitialGuiceInjectorStarter();
         
         assertThrows(IllegalStateException.class, () -> 
-                starter.createInjectorAndStartProgramEntryPoint(Collections.emptyList(), new BasicProgramExecutionContext(new String[] {}, null)));
+                starter.createInjectorAndStartProgramEntryPoint(Collections.emptyList(), new String[] {}));
     }
 }

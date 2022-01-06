@@ -23,12 +23,14 @@ SOFTWARE.
 */
 package io.github.fthardy.progrunnerkit.deltaspike;
 
+import io.github.fthardy.progrunnerkit.core.CommandLineExecutor;
+
 import javax.inject.Qualifier;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Is used to qualifiy an implementation of {@link io.github.fthardy.progrunnerkit.core.ProgramPartEntryPoint}.
+ * Is used to qualifiy an implementation of {@link CommandLineExecutor}.
  * <p>
  * The qualified implemenation is used as the main entry point for the CDI enabled programm.
  * </p>

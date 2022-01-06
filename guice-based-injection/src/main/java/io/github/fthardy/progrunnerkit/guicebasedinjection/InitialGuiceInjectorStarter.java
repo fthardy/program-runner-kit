@@ -26,8 +26,7 @@ package io.github.fthardy.progrunnerkit.guicebasedinjection;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import io.github.fthardy.progrunnerkit.core.ProgramExecutionContext;
-import io.github.fthardy.progrunnerkit.core.ProgramPartEntryPoint;
+import io.github.fthardy.progrunnerkit.core.CommandLineExecutor;
 
 import java.util.List;
 import java.util.ServiceLoader;
@@ -42,27 +41,27 @@ import java.util.stream.StreamSupport;
  * The {@link InitialGuiceModuleProviderService} instances are loaded by a {@link ServiceLoader}.
  * </p>
  */
-public final class InitialGuiceInjectorStarter implements ProgramPartEntryPoint {
+public final class InitialGuiceInjectorStarter implements CommandLineExecutor {
     
     static final String MSG_NO_IMPLS_FOUND = String.format(
                 "No implementation(s) found for '%s'! Make sure that at least one service-provider configuration for this type is in the class path available.",
                 InitialGuiceModuleProviderService.class.getName());
     
     @Override
-    public int execute(ProgramExecutionContext context) {
-        return this.createInjectorAndStartProgramEntryPoint(ServiceLoader.load(InitialGuiceModuleProviderService.class), context);
+    public int execute(String[] args) {
+        return this.createInjectorAndStartProgramEntryPoint(ServiceLoader.load(InitialGuiceModuleProviderService.class), args);
     }
 
     /**
-     * Is called by {@link #execute(ProgramExecutionContext)}. Creates the injector, obtains an instance of {@link GuiceBasedInjectionRootEntryPoint} and
+     * Is called by {@link #execute(String[])}. Creates the injector, obtains an instance of {@link GuiceBasedInjectionRootEntryPoint} and
      * delegates the execution to this instance.
      * 
      * @param moduleProviders the module providers.
-     * @param context the program execution context.
+     * @param args the command line arguments.
      *                
      * @return the status code from the delegate entry point.
      */
-    int createInjectorAndStartProgramEntryPoint(Iterable<InitialGuiceModuleProviderService> moduleProviders, ProgramExecutionContext context) {
+    int createInjectorAndStartProgramEntryPoint(Iterable<InitialGuiceModuleProviderService> moduleProviders, String[] args) {
         Stream<InitialGuiceModuleProviderService> stream = StreamSupport.stream(moduleProviders.spliterator(), false);
         List<Module> modules = stream.map(InitialGuiceModuleProviderService::createInitialGuiceModule).collect(Collectors.toList());
         if (modules.isEmpty()) {
@@ -73,6 +72,6 @@ public final class InitialGuiceInjectorStarter implements ProgramPartEntryPoint 
         // Let (most of) the injection-magic happen!
         GuiceBasedInjectionRootEntryPoint entryPoint = initialInjector.getInstance(GuiceBasedInjectionRootEntryPoint.class);
 
-        return entryPoint.execute(context);
+        return entryPoint.execute(args);
     }
 }

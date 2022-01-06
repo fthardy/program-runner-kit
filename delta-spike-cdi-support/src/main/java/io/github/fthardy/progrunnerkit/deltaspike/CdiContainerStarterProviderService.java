@@ -23,24 +23,24 @@ SOFTWARE.
 */
 package io.github.fthardy.progrunnerkit.deltaspike;
 
-import io.github.fthardy.progrunnerkit.base.AbstractInitialProgramProviderService;
-import io.github.fthardy.progrunnerkit.core.ProgramPartEntryPoint;
+import io.github.fthardy.progrunnerkit.base.CommandLineExecutorProviderService;
+import io.github.fthardy.progrunnerkit.core.CommandLineExecutor;
 
 /**
- * An implementation for a {@link io.github.fthardy.progrunnerkit.base.InitialProgramProviderService} which is used by
+ * An implementation for a {@link CommandLineExecutorProviderService} which is used by
  * {@link io.github.fthardy.progrunnerkit.base.BaseMain}.
  * <p>
  * You might decide to use {@link io.github.fthardy.progrunnerkit.base.BaseMain} as your main program starter than you can put the FQN of this class into a
- * service-provider configuration file for {@link io.github.fthardy.progrunnerkit.base.InitialProgramProviderService}.
+ * service-provider configuration file for {@link CommandLineExecutorProviderService}.
  * </p>
  * <p>
  * This implementation creates an instance of {@link DeltaSpikeContainerStarter}.
  * </p>
  */
-public final class CdiContainerStarterProviderService extends AbstractInitialProgramProviderService {
+public final class CdiContainerStarterProviderService implements CommandLineExecutorProviderService {
     
     @Override
-    public ProgramPartEntryPoint getProgramRootEntryPointImpl() {
+    public CommandLineExecutor getCommandLineExecutorImpl() {
         return new DeltaSpikeContainerStarter();
     }
 }

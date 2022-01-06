@@ -23,14 +23,12 @@ SOFTWARE.
 */
 package io.github.fthardy.progrunnerkit.guicebasedinjection;
 
-import io.github.fthardy.progrunnerkit.core.ProgramExecutionContext;
-
 public final class MainEntryPoint implements GuiceBasedInjectionRootEntryPoint {
     
     // further injections can be added here...  
     
     @Override
-    public int execute(ProgramExecutionContext context) {
+    public int execute(String[] args) {
         return 42;
     }
 }

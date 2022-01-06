@@ -23,8 +23,7 @@ SOFTWARE.
  */
 package io.github.fthardy.progrunnerkit.base;
 
-import io.github.fthardy.progrunnerkit.core.ProgramExecutionContext;
-import io.github.fthardy.progrunnerkit.core.ProgramPartEntryPoint;
+import io.github.fthardy.progrunnerkit.core.CommandLineExecutor;
 
 import java.util.*;
 
@@ -32,20 +31,18 @@ import java.util.*;
  * A class with a default implemenation of a main-method.
  * <p>
  * The implementation is based on the {@link ServiceLoader} facility of the JDK. A ServiceLoader is used to load an implementation instance of type 
- * {@link InitialProgramProviderService}. It is expected that exactly one implementation is bound by a service-provider configuration. If no implementation or
+ * {@link CommandLineExecutorProviderService}. It is expected that exactly one implementation is bound by a service-provider configuration. If no implementation or
  * more than one implementation is found the program ends immediately by throwing an {@link IllegalStateException}.
  * </p>
  * <p>
- * A {@link ProgramPartEntryPoint} implementation as the root entry point for the program is obtained from the {@link InitialProgramProviderService} instance.
- * Then the
- * {@link ProgramPartEntryPoint#execute(ProgramExecutionContext)} method is invoked. The returned status code is used as the exit code while the process is
- * stopped by calling {@link System#exit(int)}. 
+ * A {@link CommandLineExecutor} implementation as the root entry point for the program is obtained from the {@link CommandLineExecutorProviderService} instance.
+ * The returned status code is used as the exit code while the process is stopped by calling {@link System#exit(int)}.
  * </p>
  * <p>
  * No exception handling is done in this implementation. Any runtime exception will cause the program to end immediately throwing this exception.
  * </p>
  * 
- * @see InitialProgramProviderService
+ * @see CommandLineExecutorProviderService
  */
 public final class BaseMain {
 
@@ -61,9 +58,9 @@ public final class BaseMain {
      * @return a status code to be returned by the process via {@link System#exit(int)}.
      */
     public static int startProgram(String[] args) {
-        InitialProgramProviderService providerService = ServiceLoaderUtil.expectAndRetrieveExactlyOneServiceImplInstanceOfType(
-                InitialProgramProviderService.class, ServiceLoader.load(InitialProgramProviderService.class));
-        return providerService.getProgramRootEntryPointImpl().execute(providerService.createInitialProgramExecutionContext(args));
+        CommandLineExecutorProviderService providerService = ServiceLoaderUtil.expectAndRetrieveExactlyOneServiceImplInstanceOfType(
+                CommandLineExecutorProviderService.class, ServiceLoader.load(CommandLineExecutorProviderService.class));
+        return providerService.getCommandLineExecutorImpl().execute(args);
     }
     
     // Creating instances of this class is not allowed 

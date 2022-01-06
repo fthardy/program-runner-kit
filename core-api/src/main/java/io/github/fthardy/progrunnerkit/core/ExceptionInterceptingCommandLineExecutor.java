@@ -21,28 +21,25 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package io.github.fthardy.progrunnerkit.base;
-
-import io.github.fthardy.progrunnerkit.core.ProgramExecutionContext;
-import io.github.fthardy.progrunnerkit.core.ProgramPartEntryPoint;
+package io.github.fthardy.progrunnerkit.core;
 
 import java.util.Objects;
 
 /**
- * A decorator implementation for a program part which separates exception handling by intercepting any kind of {@link RuntimeException} passing it to an
- * implemenation of {@link ExceptionHandler}.
+ * A decorator implementation for a command line executor which separates the cross cuting aspect of exception handling by intercepting any kind of
+ * {@link RuntimeException} passing it to an implemenation of {@link ExceptionHandler}.
  * <p>
  * If the exception handler itself throws an exception it is not handled but thrown to the caller/owner of the decorator.
  * </p>
  * 
  * @see ExceptionHandler
  */
-public final class ExceptionInterceptingProgramPartEntryPoint implements ProgramPartEntryPoint {
+public final class ExceptionInterceptingCommandLineExecutor implements CommandLineExecutor {
 
     /**
-     * The interface definition for an exception handler used by a {@link ExceptionInterceptingProgramPartEntryPoint}.
+     * The interface definition for an exception handler used by a {@link ExceptionInterceptingCommandLineExecutor}.
      * 
-     * @see ExceptionInterceptingProgramPartEntryPoint
+     * @see ExceptionInterceptingCommandLineExecutor
      */
     public interface ExceptionHandler {
 
@@ -53,29 +50,29 @@ public final class ExceptionInterceptingProgramPartEntryPoint implements Program
          *
          * @return a status code.
          */
-        int handleExceptionFromMainRoutine(Exception exception);
+        int handleException(Exception exception);
     }
     
-    private final ProgramPartEntryPoint programPartEntryPoint;
+    private final CommandLineExecutor delegateExecutor;
     private final ExceptionHandler exceptionHandler;
 
     /**
-     * Creates a new instance of this runner proxy.
+     * Creates a new instance of this decorator.
      * 
-     * @param programPart the program part to delegate to.
+     * @param delegateExecutor the executor to delegate to.
      * @param exceptionHandler the exception handler.
      */
-    public ExceptionInterceptingProgramPartEntryPoint(ProgramPartEntryPoint programPart, ExceptionHandler exceptionHandler) {
-        this.programPartEntryPoint = Objects.requireNonNull(programPart);
+    public ExceptionInterceptingCommandLineExecutor(CommandLineExecutor delegateExecutor, ExceptionHandler exceptionHandler) {
+        this.delegateExecutor = Objects.requireNonNull(delegateExecutor);
         this.exceptionHandler = Objects.requireNonNull(exceptionHandler);
     }
 
     @Override
-    public int execute(ProgramExecutionContext context) {
+    public int execute(String[] args) {
         try {
-            return this.programPartEntryPoint.execute(context);
+            return this.delegateExecutor.execute(args);
         } catch (Exception e) {
-            return this.exceptionHandler.handleExceptionFromMainRoutine(e);
+            return this.exceptionHandler.handleException(e);
         }
     }
 }

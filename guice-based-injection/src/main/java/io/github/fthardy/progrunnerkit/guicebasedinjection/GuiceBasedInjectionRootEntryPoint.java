@@ -23,7 +23,7 @@ SOFTWARE.
 */
 package io.github.fthardy.progrunnerkit.guicebasedinjection;
 
-import io.github.fthardy.progrunnerkit.core.ProgramPartEntryPoint;
+import io.github.fthardy.progrunnerkit.core.CommandLineExecutor;
 
 /**
  * A marker type for a program entry point which is managed by a Guice-Injector.
@@ -34,6 +34,6 @@ import io.github.fthardy.progrunnerkit.core.ProgramPartEntryPoint;
  * 
  * @see InitialGuiceModuleProviderService
  */
-public interface GuiceBasedInjectionRootEntryPoint extends ProgramPartEntryPoint {
+public interface GuiceBasedInjectionRootEntryPoint extends CommandLineExecutor {
     // actually no further method definitions.
 }

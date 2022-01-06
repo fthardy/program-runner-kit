@@ -56,7 +56,7 @@ public final class ServiceLoaderUtil {
         }
     }
 
-    // Do not allow to create instances of this class
+    // Do not allow creating instances of this class
     private ServiceLoaderUtil() {
         // do nothing
     }
