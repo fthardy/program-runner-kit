@@ -23,23 +23,17 @@ SOFTWARE.
 */
 package io.github.fthardy.progrunnerkit.guicebasedinjection;
 
-import com.google.inject.Module;
+import io.github.fthardy.progrunnerkit.core.CommandLineExecutor;
 
 /**
- * Defines the interface for a provider service which provides a Guice-Module instance for the initial Guice-Injector created by the
- * {@link InitialGuiceInjectorStarter}.
+ * A marker type for a program entry point which is managed by a Guice-Injector.
  * <p>
- * Is is possible to define several implementations of this interface where each returns a different module. However, any of the module has to provide a
- * binding for an implementation of {@link GuiceBasedInjectionRootEntryPoint}.
+ * An implementation should be typically a singleton (not a must) and must be provided in a Guice-Module binding where that Guice-Module has to be created and
+ * provided by a {@link InitialGuiceModuleProviderService} implementation.
  * </p>
  * 
- * @see InitialGuiceInjectorStarter
- * @see GuiceBasedInjectionRootEntryPoint
+ * @see InitialGuiceModuleProviderService
  */
-public interface InitialGuiceModuleProviderService {
-
-    /**
-     * @return a Guice-Module instance.
-     */
-    Module createInitialGuiceModule();
+public interface GuiceBasedCommandLineExecutor extends CommandLineExecutor {
+    // actually no further method definitions.
 }

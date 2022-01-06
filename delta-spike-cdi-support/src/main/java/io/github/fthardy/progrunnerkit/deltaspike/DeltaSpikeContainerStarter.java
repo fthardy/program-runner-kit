@@ -31,7 +31,7 @@ import org.apache.deltaspike.core.api.provider.BeanProvider;
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
- * A program entry point implemenation which handles the start and stop of a CDI-Container through DeltaSpikes Container-Control-Module.
+ * A command line executor implemenation which handles the start and stop of a CDI-Container through DeltaSpikes Container-Control-Module.
  * <p>
  * On execute the CDI-Container is booted. Then an instance of a {@link CommandLineExecutor} annotated with {@link CdiEnabledEntryPoint} is obtained from the
  * container. The execution is then delegated to this instance. When the calling thread returns the container is shut down.

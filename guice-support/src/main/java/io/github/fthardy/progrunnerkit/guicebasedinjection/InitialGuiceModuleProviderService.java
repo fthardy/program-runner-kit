@@ -23,21 +23,23 @@ SOFTWARE.
 */
 package io.github.fthardy.progrunnerkit.guicebasedinjection;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 
-public class ModuleProviderForTesting implements InitialGuiceModuleProviderService {
-    
-    public static final class TestModule extends AbstractModule {
-        
-        @Override
-        protected void configure() {
-            bind(GuiceBasedInjectionRootEntryPoint.class).to(MainEntryPoint.class).asEagerSingleton();
-        }
-    }
-    
-    @Override
-    public Module createInitialGuiceModule() {
-        return new TestModule();
-    }
+/**
+ * Defines the interface for a provider service which provides a Guice-Module instance for the initial Guice-Injector created by the
+ * {@link InitialGuiceInjectorStarter}.
+ * <p>
+ * Is is possible to define several implementations of this interface where each returns a different module. However, any of the module has to provide a
+ * binding for an implementation of {@link GuiceBasedCommandLineExecutor}.
+ * </p>
+ * 
+ * @see InitialGuiceInjectorStarter
+ * @see GuiceBasedCommandLineExecutor
+ */
+public interface InitialGuiceModuleProviderService {
+
+    /**
+     * @return a Guice-Module instance.
+     */
+    Module createInitialGuiceModule();
 }

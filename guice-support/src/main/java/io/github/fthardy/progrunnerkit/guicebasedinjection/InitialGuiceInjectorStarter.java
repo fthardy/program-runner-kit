@@ -53,7 +53,7 @@ public final class InitialGuiceInjectorStarter implements CommandLineExecutor {
     }
 
     /**
-     * Is called by {@link #execute(String[])}. Creates the injector, obtains an instance of {@link GuiceBasedInjectionRootEntryPoint} and
+     * Is called by {@link #execute(String[])}. Creates the injector, obtains an instance of {@link GuiceBasedCommandLineExecutor} and
      * delegates the execution to this instance.
      * 
      * @param moduleProviders the module providers.
@@ -70,7 +70,7 @@ public final class InitialGuiceInjectorStarter implements CommandLineExecutor {
         Injector initialInjector = Guice.createInjector(modules);
 
         // Let (most of) the injection-magic happen!
-        GuiceBasedInjectionRootEntryPoint entryPoint = initialInjector.getInstance(GuiceBasedInjectionRootEntryPoint.class);
+        GuiceBasedCommandLineExecutor entryPoint = initialInjector.getInstance(GuiceBasedCommandLineExecutor.class);
 
         return entryPoint.execute(args);
     }

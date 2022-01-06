@@ -23,20 +23,25 @@ SOFTWARE.
 */
 package io.github.fthardy.progrunnerkit.guicebasedinjection;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 import io.github.fthardy.progrunnerkit.base.BaseMain;
 import org.junit.jupiter.api.Test;
 
+import javax.inject.Inject;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class InitialGuiceInjectorStarterTest {
+    
+    static final int RETURN_CODE = 42;
 
     @Test
     void startGuiceBasedProgram() {
 
         int exitCode = BaseMain.startProgram(new String[]{});
-        assertEquals(42, exitCode);
+        assertEquals(RETURN_CODE, exitCode);
     }
     
     @Test
@@ -46,5 +51,39 @@ class InitialGuiceInjectorStarterTest {
         
         assertThrows(IllegalStateException.class, () -> 
                 starter.createInjectorAndStartProgramEntryPoint(Collections.emptyList(), new String[] {}));
+    }
+
+    public static class ModuleProviderForTesting implements InitialGuiceModuleProviderService {
+        
+        public static class SomeServiceOrWhatever {
+            
+            int returnCode() {
+                return RETURN_CODE;
+            }
+        }
+    
+        public static final class CommandLineExecutorImpl implements GuiceBasedCommandLineExecutor {
+    
+            @Inject
+            private SomeServiceOrWhatever serviceOrWhatever;
+    
+            @Override
+            public int execute(String[] args) {
+                return this.serviceOrWhatever.returnCode();
+            }
+        }
+        
+        public static final class TestModule extends AbstractModule {
+            
+            @Override
+            protected void configure() {
+                bind(GuiceBasedCommandLineExecutor.class).to(CommandLineExecutorImpl.class).asEagerSingleton();
+            }
+        }
+        
+        @Override
+        public Module createInitialGuiceModule() {
+            return new TestModule();
+        }
     }
 }
