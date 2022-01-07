@@ -1,0 +1,3 @@
+plugins {
+	id 'progrunnerkit.java-lib-conventions'
+}

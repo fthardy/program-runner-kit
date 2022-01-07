@@ -1,0 +1,53 @@
+/*
+MIT License
+
+Copyright (c) 2019 Frank Hardy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
+package io.github.fthardy.progrunnerkit.commonsclisupport;
+
+import org.apache.commons.cli.Options;
+
+import java.util.Objects;
+
+/**
+ * The interface definition for a help text writer.
+ */
+public abstract class HelpTextWriter {
+    
+    protected final String commandLineSyntaxDescription;
+    protected final Options options;
+
+    /**
+     * Create a new instance of this help text writer.
+     *
+     * @param commandLineSyntaxDescription the text line which describes the call syntax for the program.
+     * @param options the option configuration for the command line.
+     */
+    public HelpTextWriter(String commandLineSyntaxDescription, Options options) {
+        this.commandLineSyntaxDescription = Objects.requireNonNull(commandLineSyntaxDescription);
+        this.options = Objects.requireNonNull(options);
+    }
+
+    /**
+     * Writes the help text to the sytem out stream.
+     */
+    public abstract void writeHelpTextToSystemOut();
+}
