@@ -30,24 +30,24 @@ import java.util.*;
 /**
  * The implementation of the commons-cli command line adapter. 
  */
-public final class CommonsCommandLine implements CommandLine {
+public final class CommonsCliCommandLine implements CommandLine {
     
     private final List<String> commandLineArguments;
-    private final org.apache.commons.cli.CommandLine commandLineObject;
+    private final org.apache.commons.cli.CommandLine parsedCommandLine;
 
     /**
      * Create a new instance of this command line implementation.
      * 
-     * @param commandLineObject the command line object returned by the commons-cli parser.
+     * @param parsedCommandLine the command line object returned by the commons-cli parser.
      */
-    public CommonsCommandLine(String[] args, org.apache.commons.cli.CommandLine commandLineObject) {
+    public CommonsCliCommandLine(String[] args, org.apache.commons.cli.CommandLine parsedCommandLine) {
         this.commandLineArguments = Arrays.asList(Objects.requireNonNull(args));
-        this.commandLineObject = Objects.requireNonNull(commandLineObject);
+        this.parsedCommandLine = Objects.requireNonNull(parsedCommandLine);
     }
     
     @Override
     public boolean isSet(String id) {
-        return this.commandLineObject.hasOption(id);
+        return this.parsedCommandLine.hasOption(id);
     }
 
     @Override
@@ -57,12 +57,12 @@ public final class CommonsCommandLine implements CommandLine {
 
     @Override
     public List<String> getUnparsedArguments() {
-        return this.commandLineObject.getArgList();
+        return this.parsedCommandLine.getArgList();
     }
 
     @Override
     public Optional<String> getParameterValue(String id) {
-        return Optional.ofNullable(this.commandLineObject.getOptionValue(id));
+        return Optional.ofNullable(this.parsedCommandLine.getOptionValue(id));
     }
 
     @Override
@@ -77,7 +77,7 @@ public final class CommonsCommandLine implements CommandLine {
         if (this.isSet(id)) {
             if (Properties.class.equals(type)) {
                 // even tho the api says that a non-null is returned we do not rely on this
-                return Optional.ofNullable(type.cast(this.commandLineObject.getOptionProperties(id)));
+                return Optional.ofNullable(type.cast(this.parsedCommandLine.getOptionProperties(id)));
             } else {
                 throw new ClassCastException(String.format("The type [%s] is not supported by commons-cli. Only the type [%s] is supported.",
                         type.getName(), Properties.class.getName()));

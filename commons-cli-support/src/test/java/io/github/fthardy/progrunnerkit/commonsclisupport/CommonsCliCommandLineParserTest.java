@@ -35,22 +35,29 @@ class CommonsCliCommandLineParserTest {
 
     @Test
     void Parser_cannot_be_null() {
-        assertThrows(NullPointerException.class, () -> new CommonsCliCommandLineParser(null, null, null));
+        assertThrows(NullPointerException.class, () -> new CommonsCliCommandLineParser(null, null));
     }
 
     @Test
     void Options_cannot_be_null() {
-        assertThrows(NullPointerException.class, () -> new CommonsCliCommandLineParser(new DefaultParser(), null, null));
+        assertThrows(NullPointerException.class, () -> new CommonsCliCommandLineParser(new DefaultParser(), null));
+    }
+    
+    @Test
+    void Description_printer_cannot_be_null() {
+        assertThrows(NullPointerException.class, () -> 
+                new CommonsCliCommandLineParser(new DefaultParser(), new Options(), (CommonsCliCommandLineParser.CommandLineDescriptionPrinter) null));
     }
 
     @Test
-    void Argument_list_is_not_allowed_to_be_null() {
+    void Parsing_null_argument_list_is_not_allowed() {
         
         Options options = new Options();
         options.addOption("test", "Test option.");
         org.apache.commons.cli.CommandLineParser parser = new DefaultParser();
 
-        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(parser, options, new DefaultHelpTextWriter("", options));
+        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(
+                parser, options, new DefaultCommandLineDescriptionPrinter(""));
         
         assertThrows(NullPointerException.class, () -> commandLineParser.parseArguments(null));
     }
@@ -61,7 +68,8 @@ class CommonsCliCommandLineParserTest {
         options.addOption("test", "Test option.");
         org.apache.commons.cli.CommandLineParser parser = new DefaultParser();
 
-        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(parser, options, new DefaultHelpTextWriter("", options));
+        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(
+                parser, options, new DefaultCommandLineDescriptionPrinter(""));
 
         assertThrows(CommandLineParseException.class, () -> commandLineParser.parseArguments(new String[] {"-bla"}));
     }

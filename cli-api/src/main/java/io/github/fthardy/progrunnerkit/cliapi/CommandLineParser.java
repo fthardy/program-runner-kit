@@ -40,7 +40,7 @@ public interface CommandLineParser {
     CommandLine parseArguments(String[] arguments) throws CommandLineParseException;
 
     /**
-     * Writes a help text to the system output stream.
+     * Print the text which describes the command line (help text) to the command line console. 
      */
-    void writeHelpTextToSystemOut();
+    void printCommandLineDescription();
 }

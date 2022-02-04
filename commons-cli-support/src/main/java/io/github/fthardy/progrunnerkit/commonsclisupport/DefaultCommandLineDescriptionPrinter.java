@@ -23,31 +23,27 @@ SOFTWARE.
  */
 package io.github.fthardy.progrunnerkit.commonsclisupport;
 
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 
-import java.util.Objects;
-
 /**
- * The interface definition for a help text writer.
+ * Default implementation for a help text writer.
  */
-public abstract class HelpTextWriter {
+public final class DefaultCommandLineDescriptionPrinter implements CommonsCliCommandLineParser.CommandLineDescriptionPrinter {
     
-    protected final String commandLineSyntaxDescription;
-    protected final Options options;
+    private final String commandLineSyntaxDescriptionText;
 
     /**
-     * Create a new instance of this help text writer.
-     *
-     * @param commandLineSyntaxDescription the text line which describes the call syntax for the program.
-     * @param options the option configuration for the command line.
+     * Create a new instance of this printer.
+     * 
+     * @param commandLineSyntaxDescriptionText the text of the command line syntax description.
      */
-    public HelpTextWriter(String commandLineSyntaxDescription, Options options) {
-        this.commandLineSyntaxDescription = Objects.requireNonNull(commandLineSyntaxDescription);
-        this.options = Objects.requireNonNull(options);
+    public DefaultCommandLineDescriptionPrinter(String commandLineSyntaxDescriptionText) {
+        this.commandLineSyntaxDescriptionText = commandLineSyntaxDescriptionText;
     }
 
-    /**
-     * Writes the help text to the sytem out stream.
-     */
-    public abstract void writeHelpTextToSystemOut();
+    @Override
+    public void printCommandLineDescriptionForOptions(Options options) {
+        new HelpFormatter().printHelp(this.commandLineSyntaxDescriptionText, options);
+    }
 }
