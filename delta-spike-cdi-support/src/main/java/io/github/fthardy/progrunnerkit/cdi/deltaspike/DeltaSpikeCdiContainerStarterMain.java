@@ -20,36 +20,36 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
-package io.github.fthardy.progrunnerkit.deltaspike;
+ */
+package io.github.fthardy.progrunnerkit.cdi.deltaspike;
 
 import io.github.fthardy.progrunnerkit.core.CommandLineExecutor;
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
 import org.apache.deltaspike.core.api.provider.BeanProvider;
 
-import javax.enterprise.util.AnnotationLiteral;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
- * A command line executor implemenation which handles the start and stop of a CDI-Container through DeltaSpikes Container-Control-Module.
+ * A main class implementation which starts a CDI-Container instance through DeltaSpikes Container-Control-Module.
  * <p>
- * On execute the CDI-Container is booted. Then an instance of a {@link CommandLineExecutor} annotated with {@link CdiEnabledEntryPoint} is obtained from the
- * container. The execution is then delegated to this instance. When the calling thread returns the container is shut down.
+ * When the main method is executed the CDI-Container is booted. Then an instance of a {@link CommandLineExecutor} implementation annotated with
+ * {@link ApplicationScoped} is obtained from the container. The execution is then delegated to that instance. When the calling thread returns the container is
+ * shut down and {@link System#exit(int)} is called passing the returned status code.
  * </p>
- */
-public final class DeltaSpikeContainerStarter implements CommandLineExecutor {
-    
-    private static final class CdiEnabledEntryPointLiteral extends AnnotationLiteral<CdiEnabledEntryPoint> implements CdiEnabledEntryPoint {};
-    
-    @Override
-    public int execute(String[] args) {
-        
+ * <p>
+ * No exception handling is done in this implementation. Any runtime exception will cause the program to end immediately throwing this exception.
+ * </p> */
+public final class DeltaSpikeCdiContainerStarterMain {
+
+    public static void main(String[] args) {
+
         CdiContainer cdiContainer = CdiContainerLoader.getCdiContainer();
         cdiContainer.boot();
 
         try {
-            // Let the injection magic happen.
-            return BeanProvider.getContextualReference(CommandLineExecutor.class, false, new CdiEnabledEntryPointLiteral()).execute(args);
+            cdiContainer.getContextControl().startContext(ApplicationScoped.class);
+            System.exit(BeanProvider.getContextualReference(CommandLineExecutor.class, new ApplicationScoped.Literal()).execute(args));
         } finally {
             cdiContainer.shutdown();
         }

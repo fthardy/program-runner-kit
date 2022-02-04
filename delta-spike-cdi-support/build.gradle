@@ -5,11 +5,11 @@ plugins {
 def deltaSpikeVersion = '1.9.5'
 
 dependencies {
-	api project(coreApiProject)
-	api project(baseProject)
 	
-	compileOnly group: 'javax.enterprise', name: 'cdi-api', version: '2.0.SP1'
-
+	api project(coreApiProject)
+	
+	implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0.SP1'
+	
 	implementation group: 'org.apache.deltaspike.core', name: 'deltaspike-core-api', version: deltaSpikeVersion
 	implementation group: 'org.apache.deltaspike.cdictrl', name: 'deltaspike-cdictrl-api', version: deltaSpikeVersion
 }
