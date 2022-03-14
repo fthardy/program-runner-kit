@@ -21,34 +21,35 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package io.github.fthardy.progrunnerkit.cliapi;
+package io.github.fthardy.progrunnerkit.commonsclisupport;
 
-import java.util.List;
+import io.github.fthardy.progrunnerkit.cliapi.CommandLineHelpTextPrinter;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+
+import java.util.Objects;
 
 /**
- * A command line parser.
+ * Default implementation for a help text printer.
  */
-public interface CommandLineParser {
+public class DefaultCommandLineHelpTextPrinter implements CommandLineHelpTextPrinter {
+    
+    private final String commandLineSyntaxDescriptionText;
+    private final Options options;
 
     /**
-     * Parse the given command line arguments.
+     * Create a new instance of this printer.
      * 
-     * @param arguments the command line arguments to be parsed.
-     *                  
-     * @return the command line object representing the parsed arguments.
-     * 
-     * @throws CommandLineParseException when parsing of the command line fails for some reason.
+     * @param options the option for the parser.
+     * @param commandLineSyntaxDescriptionText the text of the command line syntax description.
      */
-    CommandLine parseArguments(String[] arguments) throws CommandLineParseException;
+    public DefaultCommandLineHelpTextPrinter(Options options, String commandLineSyntaxDescriptionText) {
+        this.options = Objects.requireNonNull(options);
+        this.commandLineSyntaxDescriptionText = commandLineSyntaxDescriptionText;
+    }
 
-    /**
-     * Parse the given command line arguments.
-     * 
-     * @param arguments the list of the command line arguments to be parsed.
-     *                  
-     * @return the command line object representing the parsed arguments.
-     *
-     * @throws CommandLineParseException when parsing of the command line fails for some reason.
-     */
-    CommandLine parseArguments(List<String> arguments) throws CommandLineParseException;
+    @Override
+    public void printCommandLineHelpText() {
+        new HelpFormatter().printHelp(this.commandLineSyntaxDescriptionText, this.options);
+    }
 }

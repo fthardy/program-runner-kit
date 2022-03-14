@@ -1,0 +1,2 @@
+io.github.fthardy.progrunnerkit.cdi.deltaspike.DefaultDeltaSpikeCdiApplicationScopeStopTask
+io.github.fthardy.progrunnerkit.cdi.deltaspike.DefaultDeltaSpikeCdiContainerShutdownTask

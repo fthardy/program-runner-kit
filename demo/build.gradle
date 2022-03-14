@@ -1,0 +1,29 @@
+plugins {
+	id 'application'
+	id 'maven-publish'
+}
+group 'io.github.fthardy.progrunnerkit'
+version '1.0.0-SNAPSHOT'
+
+repositories {
+	mavenCentral()
+}
+
+def deltaSpikeVersion = '1.9.5'
+
+dependencies {
+
+	implementation project(coreProject)
+	implementation project(deltaSpikeCdiSupportProject)
+	implementation project(commonsCliSupportProject)
+
+	implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0.SP1'
+	
+	runtimeOnly group: 'org.apache.deltaspike.cdictrl', name: 'deltaspike-cdictrl-weld', version: deltaSpikeVersion
+
+	runtimeOnly group: 'org.jboss.weld.se', name: 'weld-se-core', version: '3.1.8.Final'
+}
+
+application {
+	mainClass = 'io.github.fthardy.progrunnerkit.core.DefaultMain'
+}

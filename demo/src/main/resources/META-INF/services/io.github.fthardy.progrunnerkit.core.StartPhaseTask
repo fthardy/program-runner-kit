@@ -1,0 +1,4 @@
+io.github.fthardy.progrunnerkit.cdi.deltaspike.DefaultDeltaSpikeCdiContainerBootTask
+io.github.fthardy.progrunnerkit.cdi.deltaspike.DefaultDeltaSpikeCdiApplicationScopeStartTask
+io.github.fthardy.progrunnerkit.demo.CommandLineArgumentParsingTask
+io.github.fthardy.progrunnerkit.cdi.deltaspike.DefaultDeltaSpikeCdiApplicationStarterTask

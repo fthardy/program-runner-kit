@@ -26,19 +26,19 @@ package io.github.fthardy.progrunnerkit.commonsclisupport;
 import io.github.fthardy.progrunnerkit.cliapi.CommandLine;
 import io.github.fthardy.progrunnerkit.cliapi.CommandLineParseException;
 import io.github.fthardy.progrunnerkit.cliapi.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CommonsCliCommandLineTest {
-    
-    private final org.apache.commons.cli.CommandLineParser parser = new DefaultParser();
 
     @Test
     void Option_switch_with_short_name_present_no_further_args() throws CommandLineParseException {
@@ -46,7 +46,7 @@ class CommonsCliCommandLineTest {
         Options options = new Options();
         options.addOption("t", "test", false,"Test option.");
 
-        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(this.parser, options);
+        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(options);
 
         CommandLine commandLine = commandLineParser.parseArguments(new String[]{"-t"});
         
@@ -67,7 +67,7 @@ class CommonsCliCommandLineTest {
         Options options = new Options();
         options.addOption("t", "test", false,"Test option.");
 
-        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(this.parser, options);
+        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(options);
 
         CommandLine commandLine = commandLineParser.parseArguments(new String[]{"--test", "foo", "bar"});
 
@@ -87,7 +87,7 @@ class CommonsCliCommandLineTest {
         Options options = new Options();
         options.addOption("p", "param", true, "Parameter.");
 
-        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(this.parser, options);
+        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(options);
 
         CommandLine commandLine = commandLineParser.parseArguments(new String[]{"-p", "foo"});
         
@@ -102,7 +102,7 @@ class CommonsCliCommandLineTest {
         Options options = new Options();
         options.addOption(Option.builder("D").hasArgs().valueSeparator('=').build());
         
-        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(this.parser, options);
+        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(options);
         
         CommandLine commandLine = commandLineParser.parseArguments(new String[]{"-D", "foo=ping", "-D", "bar=pong"});
 
@@ -124,7 +124,7 @@ class CommonsCliCommandLineTest {
         options.addOption(Option.builder("D").hasArgs().valueSeparator('=').build());
         options.addOption("h", "Help");
 
-        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(this.parser, options);
+        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(options);
 
         CommandLine commandLine = commandLineParser.parseArguments(new String[]{"-h"});
 
@@ -142,7 +142,7 @@ class CommonsCliCommandLineTest {
         options.addOption(Option.builder("D").hasArgs().valueSeparator('=').build());
         options.addOption("h", "Help");
 
-        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(this.parser, options);
+        CommandLineParser commandLineParser = new CommonsCliCommandLineParser(options);
 
         CommandLine commandLine = commandLineParser.parseArguments(new String[]{"-D", "foo=ping", "-D", "bar=pong"});
         

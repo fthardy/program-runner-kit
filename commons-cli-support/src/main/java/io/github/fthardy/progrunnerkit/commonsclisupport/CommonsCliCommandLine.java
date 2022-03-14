@@ -30,7 +30,7 @@ import java.util.*;
 /**
  * The implementation of the commons-cli command line adapter. 
  */
-public final class CommonsCliCommandLine implements CommandLine {
+public class CommonsCliCommandLine implements CommandLine {
     
     private final List<String> commandLineArguments;
     private final org.apache.commons.cli.CommandLine parsedCommandLine;

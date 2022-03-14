@@ -21,29 +21,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-plugins {
-    id 'java-library'
-    id 'maven-publish'
-}
+package io.github.fthardy.progrunnerkit.demo;
 
-group 'io.github.fthardy.progrunnerkit'
-version '0.1.0-SNAPSHOT'
+import io.github.fthardy.progrunnerkit.cliapi.CommandLineParseException;
+import io.github.fthardy.progrunnerkit.core.StartPhaseController;
 
-repositories {
-    mavenCentral()
-}
+public class ApplicationStartPhaseController implements StartPhaseController {
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.7.1'
-    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.7.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.9.0'
-    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.9.0'
-    testImplementation group: 'org.assertj', name: 'assertj-core-java8', version: '1.0.0m1'
-}
-
-test {
-    useJUnitPlatform()
+    @Override
+    public boolean onExceptionFromTask(String fromTaskId, RuntimeException exception) {
+        if (exception instanceof CommandLineParseException) {
+            System.out.println("Failed to parse the command line:");
+            System.out.println();
+            exception.printStackTrace();
+        }
+        return false;
+    }
 }

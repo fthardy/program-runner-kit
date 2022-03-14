@@ -1,8 +1,0 @@
-plugins {
-	id 'progrunnerkit.java-lib-conventions'
-}
-
-dependencies {
-
-	api project(coreApiProject)
-}

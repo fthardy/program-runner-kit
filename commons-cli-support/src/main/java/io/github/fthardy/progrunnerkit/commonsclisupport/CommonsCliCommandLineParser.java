@@ -26,15 +26,17 @@ package io.github.fthardy.progrunnerkit.commonsclisupport;
 import io.github.fthardy.progrunnerkit.cliapi.CommandLine;
 import io.github.fthardy.progrunnerkit.cliapi.CommandLineParseException;
 import io.github.fthardy.progrunnerkit.cliapi.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
  * The implementation of the commons-cli command line parser adapter. 
  */
-public final class CommonsCliCommandLineParser implements CommandLineParser {
+public class CommonsCliCommandLineParser implements CommandLineParser {
 
     /**
      * Represents the printer interface for printing the command line description to the console.
@@ -51,27 +53,42 @@ public final class CommonsCliCommandLineParser implements CommandLineParser {
     
     private final org.apache.commons.cli.CommandLineParser parser;
     private final Options parserOptions;
-    private final CommandLineDescriptionPrinter descriptionPrinter;
 
     /**
      * Creates a new instance of this command line parser implementation.
      *
      * @param parser the commons-cli parser instance to use for parsing the command line.
      * @param options the options for parsing.
-     * @param descriptionPrinter the description printer implementation.
      */
-    public CommonsCliCommandLineParser(org.apache.commons.cli.CommandLineParser parser, Options options, CommandLineDescriptionPrinter descriptionPrinter) {
+    public CommonsCliCommandLineParser(org.apache.commons.cli.CommandLineParser parser, Options options) {
         this.parser = Objects.requireNonNull(parser);
         this.parserOptions = Objects.requireNonNull(options);
-        this.descriptionPrinter = Objects.requireNonNull(descriptionPrinter);
     }
-    
+
+    /**
+     * Creates a new instance of this command line parser implementation.
+     * <p>
+     * A {@link DefaultCommandLineHelpTextPrinter} is created implicitly.
+     * </p>
+     * 
+     * @param parser the commons-cli parser instance to use for parsing the command line.
+     * @param options the options for parsing.
+     * @param commandLineSyntaxDescriptionText the syntax description of the command line call.
+     */
     public CommonsCliCommandLineParser(org.apache.commons.cli.CommandLineParser parser, Options options, String commandLineSyntaxDescriptionText) {
-        this(parser, options, new DefaultCommandLineDescriptionPrinter(commandLineSyntaxDescriptionText));
+        this(parser, options);
     }
-    
-    public CommonsCliCommandLineParser(org.apache.commons.cli.CommandLineParser parser, Options options) {
-        this(parser, options, new DefaultCommandLineDescriptionPrinter("programm [Options] [Arguments]"));
+
+    /**
+     * Creates a new instance of this command line parser implementation.
+     * <p>
+     * A default parser instance with no partial matching is created implicitly.
+     * </p>
+     *
+     * @param options the options for parsing.
+     */
+    public CommonsCliCommandLineParser(Options options) {
+        this(new DefaultParser(false), options);
     }
     
     @Override
@@ -85,7 +102,7 @@ public final class CommonsCliCommandLineParser implements CommandLineParser {
     }
 
     @Override
-    public void printCommandLineDescription() {
-        this.descriptionPrinter.printCommandLineDescriptionForOptions(this.parserOptions);
+    public CommandLine parseArguments(List<String> arguments) throws CommandLineParseException {
+        return this.parseArguments(arguments.toArray(new String[0]));
     }
 }

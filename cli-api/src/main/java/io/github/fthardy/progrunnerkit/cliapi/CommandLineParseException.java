@@ -26,7 +26,7 @@ package io.github.fthardy.progrunnerkit.cliapi;
 /**
  * This exception is thrown by the command line parser when a command line cannot be parsed.
  */
-public class CommandLineParseException extends Exception {
+public class CommandLineParseException extends RuntimeException {
 
     public CommandLineParseException(String message) {
         super(message);

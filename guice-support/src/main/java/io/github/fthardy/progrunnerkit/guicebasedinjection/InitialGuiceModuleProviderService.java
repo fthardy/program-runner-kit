@@ -26,15 +26,12 @@ package io.github.fthardy.progrunnerkit.guicebasedinjection;
 import com.google.inject.Module;
 
 /**
- * Defines the interface for a provider service which provides a Guice-Module instance for the initial Guice-Injector created by the
- * {@link InitialGuiceInjectorStarter}.
+ * A service provider interface definition.
  * <p>
- * Is is possible to define several implementations of this interface where each returns a different module. However, any of the module has to provide a
- * binding for an implementation of {@link GuiceBasedCommandLineExecutor}.
+ * Provides a Guice-Module instance for the injector created by a {@link InitialGuiceInjectorStarterTask}.
  * </p>
  * 
- * @see InitialGuiceInjectorStarter
- * @see GuiceBasedCommandLineExecutor
+ * @see InitialGuiceInjectorStarterTask
  */
 public interface InitialGuiceModuleProviderService {
 

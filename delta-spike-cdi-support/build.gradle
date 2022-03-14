@@ -6,10 +6,12 @@ def deltaSpikeVersion = '1.9.5'
 
 dependencies {
 	
-	api project(coreApiProject)
+	api project(coreProject)
 	
-	implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0.SP1'
+	api group: 'javax.enterprise', name: 'cdi-api', version: '2.0.SP1'
 	
-	implementation group: 'org.apache.deltaspike.core', name: 'deltaspike-core-api', version: deltaSpikeVersion
-	implementation group: 'org.apache.deltaspike.cdictrl', name: 'deltaspike-cdictrl-api', version: deltaSpikeVersion
+	api group: 'org.apache.deltaspike.core', name: 'deltaspike-core-api', version: deltaSpikeVersion
+	api group: 'org.apache.deltaspike.cdictrl', name: 'deltaspike-cdictrl-api', version: deltaSpikeVersion
+
+	runtimeOnly group: 'org.apache.deltaspike.core', name: 'deltaspike-core-impl', version: deltaSpikeVersion
 }

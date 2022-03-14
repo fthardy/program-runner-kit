@@ -21,29 +21,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-plugins {
-    id 'java-library'
-    id 'maven-publish'
-}
+package io.github.fthardy.progrunnerkit.guicebasedinjection;
 
-group 'io.github.fthardy.progrunnerkit'
-version '0.1.0-SNAPSHOT'
+import org.junit.jupiter.api.Test;
 
-repositories {
-    mavenCentral()
-}
+import java.util.Collections;
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testImplementation group: 'org.junit.platform', name: 'junit-platform-runner', version: '1.7.1'
-    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.7.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.9.0'
-    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.9.0'
-    testImplementation group: 'org.assertj', name: 'assertj-core-java8', version: '1.0.0m1'
-}
+class InitialGuiceInjectorStarterTaskTest {
 
-test {
-    useJUnitPlatform()
+    @Test
+    public void No_services_found() {
+
+        InitialGuiceInjectorStarterTask starter = new InitialGuiceInjectorStarterTask();
+        
+        starter.run(Collections.emptyList());
+        
+        assertNotNull(InitialGuiceInjectorStarterTask.getInjector());
+    }
+    
+    @Test
+    public void No_injector_available() {
+        
+        assertThrows(IllegalStateException.class, InitialGuiceInjectorStarterTask::getInjector);
+    }
 }
