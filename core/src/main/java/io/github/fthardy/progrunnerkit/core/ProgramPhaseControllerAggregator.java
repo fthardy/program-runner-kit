@@ -28,13 +28,13 @@ import java.util.Collection;
 /**
  * A generic phase controller implementation which aggregates a collection of phase controllers to represent them as one.
  * <p>
- * Delegates each call to the controller instances in the order they appear in the collection. If no controller instances have been provided the call is
- * delegated to a default behaviour implementation. 
+ * Delegates each call to the controller instances in the order they appear in the collection. If no controller 
+ * instances have been provided the call is delegated to a default behaviour implementation. 
  * </p>
  * 
  * @see Main
  */
-public class AggregateProgramPhaseController implements ProgramPhaseController {
+public class ProgramPhaseControllerAggregator implements ProgramPhaseController {
 
     private final Collection<? extends ProgramPhaseController> controllers;
     private final ProgramPhaseController defaultBehaviour;
@@ -44,7 +44,7 @@ public class AggregateProgramPhaseController implements ProgramPhaseController {
      *
      * @param controllers the controller instances.
      */
-    public AggregateProgramPhaseController(Collection<? extends ProgramPhaseController> controllers) {
+    public ProgramPhaseControllerAggregator(Collection<? extends ProgramPhaseController> controllers) {
         this(controllers, null);
     }
 
@@ -54,8 +54,8 @@ public class AggregateProgramPhaseController implements ProgramPhaseController {
      * @param controllers the controller instances.
      * @param defaultBehaviour the implementation for the default behaviour. Can be {@code null}.
      */
-    public AggregateProgramPhaseController(Collection<? extends ProgramPhaseController> controllers,
-            ProgramPhaseController defaultBehaviour) {
+    public ProgramPhaseControllerAggregator(Collection<? extends ProgramPhaseController> controllers,
+                                            ProgramPhaseController defaultBehaviour) {
         this.controllers = controllers;
         this.defaultBehaviour = defaultBehaviour == null ? new ProgramPhaseController() {} : defaultBehaviour;
     }
