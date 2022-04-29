@@ -33,23 +33,41 @@ import java.util.Objects;
  * Default implementation for a help text printer.
  */
 public class DefaultCommandLineHelpTextPrinter implements CommandLineHelpTextPrinter {
-    
-    private final String commandLineSyntaxDescriptionText;
+
     private final Options options;
+    private final String commandLineSyntaxDescriptionText;
+    private final String header;
+    private final String footer;
 
     /**
      * Create a new instance of this printer.
      * 
      * @param options the option for the parser.
-     * @param commandLineSyntaxDescriptionText the text of the command line syntax description.
+     * @param commandLineSyntaxDescriptionText the text of the command line syntax description line.
+     *                                        
      */
     public DefaultCommandLineHelpTextPrinter(Options options, String commandLineSyntaxDescriptionText) {
+        this(options, commandLineSyntaxDescriptionText, "", "");
+    }
+
+    /**
+     * Create a new instance of this printer.
+     * 
+     * @param options the option for the printer
+     * @param commandLineSyntaxDescriptionText the text of the command line syntax description line.
+     * @param header a header text.
+     * @param footer a footer text.
+     */
+    public DefaultCommandLineHelpTextPrinter(Options options, String commandLineSyntaxDescriptionText, String header,
+                                             String footer) {
         this.options = Objects.requireNonNull(options);
-        this.commandLineSyntaxDescriptionText = commandLineSyntaxDescriptionText;
+        this.commandLineSyntaxDescriptionText = Objects.requireNonNull(commandLineSyntaxDescriptionText);
+        this.header = Objects.requireNonNull(header);
+        this.footer = Objects.requireNonNull(footer);
     }
 
     @Override
     public void printCommandLineHelpText() {
-        new HelpFormatter().printHelp(this.commandLineSyntaxDescriptionText, this.options);
+        new HelpFormatter().printHelp(this.commandLineSyntaxDescriptionText, this.header, this.options, this.footer);
     }
 }

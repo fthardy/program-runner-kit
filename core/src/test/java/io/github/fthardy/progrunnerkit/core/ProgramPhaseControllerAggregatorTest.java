@@ -35,14 +35,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AggregateProgramPhaseControllerTest {
+class ProgramPhaseControllerAggregatorTest {
     
     @Test
     public void No_controllers_in_given_collection() {
         
         ProgramPhaseController defaultBehaviourMock = mock(ProgramPhaseController.class);
         
-        AggregateProgramPhaseController controller = new AggregateProgramPhaseController(Collections.emptyList(), defaultBehaviourMock);
+        ProgramPhaseControllerAggregator controller = new ProgramPhaseControllerAggregator(Collections.emptyList(), defaultBehaviourMock);
         
         RuntimeException exception = new RuntimeException("TEST");
         String taskID = "task";
@@ -69,7 +69,8 @@ class AggregateProgramPhaseControllerTest {
         StartPhaseController controllerA = mock(StartPhaseController.class);
         StartPhaseController controllerB = mock(StartPhaseController.class);
         
-        AggregateProgramPhaseController controller = new AggregateProgramPhaseController(Arrays.asList(controllerA, controllerB));
+        ProgramPhaseControllerAggregator controller = 
+                new ProgramPhaseControllerAggregator(Arrays.asList(controllerA, controllerB), new StartPhaseController() {});
         
         RuntimeException exception = new RuntimeException("TEST");
         String taskID = "task";
@@ -105,7 +106,8 @@ class AggregateProgramPhaseControllerTest {
         StartPhaseController controllerB = mock(StartPhaseController.class);
         StartPhaseController controllerC = mock(StartPhaseController.class);
 
-        AggregateProgramPhaseController controller = new AggregateProgramPhaseController(Arrays.asList(controllerA, controllerB, controllerC));
+        ProgramPhaseControllerAggregator controller = 
+                new ProgramPhaseControllerAggregator(Arrays.asList(controllerA, controllerB, controllerC), new StartPhaseController() {});
 
         RuntimeException exception = new RuntimeException("TEST");
         String taskID = "task";

@@ -24,7 +24,8 @@ SOFTWARE.
 package io.github.fthardy.progrunnerkit.core;
 
 /**
- * Defines the sementic type interface for an end phase controller. The technical interface is provided by {@link ProgramPhaseController}.
+ * Defines the semantic type interface for an end phase controller. The technical interface is provided by
+ * {@link ProgramPhaseController}.
  * <p>
  * Implement this interface to define a particular start phase controller implementation. A {@link ServiceImplProvider} will collect all implementations which
  * are available through a service configuration file.
@@ -34,5 +35,21 @@ package io.github.fthardy.progrunnerkit.core;
  * @see ServiceImplProvider
  */
 public interface EndPhaseController extends ProgramPhaseController {
-    // intentionally empty
+
+    /**
+     * The default implemenation prints a message with the task-identifier and the exception stacktrace and returns
+     * {@code false} to make sure all following tasks can execute.
+     *
+     * @param fromTaskId the identifier of the start phase task which has thrown the exception.
+     * @param exception the exception thrown by the task.
+     *
+     * @return by default {@code false}.
+     */
+    default boolean onExceptionFromTask(String fromTaskId, RuntimeException exception) {
+        System.out.printf("The end phase task with identifier [%s] has thrown an exception:", fromTaskId);
+        System.out.println("----------------------------------------------------------------------------------------------------");
+        exception.printStackTrace();
+        System.out.println("----------------------------------------------------------------------------------------------------");
+        return false;
+    }
 }

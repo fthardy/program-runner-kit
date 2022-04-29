@@ -2,8 +2,6 @@ plugins {
 	id 'progrunnerkit.java-lib-conventions'
 }
 
-version = '1.0.0-SNAPSHOT'
-
 dependencies {
 	
 	api project(cliApiProject)

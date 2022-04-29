@@ -62,8 +62,10 @@ class MainTest {
     void initMocks() {
         reset(programPhaseControllerFactoryMock, programTaskRunnerFactoryMock);
         
-        when(programPhaseControllerFactoryMock.createInstance(StartPhaseController.class)).thenReturn(this.startPhaseControllerMock);
-        when(programPhaseControllerFactoryMock.createInstance(EndPhaseController.class)).thenReturn(this.endPhaseControllerMock);
+        when(programPhaseControllerFactoryMock.createInstance(
+                eq(StartPhaseController.class), any(StartPhaseController.class))).thenReturn(this.startPhaseControllerMock);
+        when(programPhaseControllerFactoryMock.createInstance(
+                eq(EndPhaseController.class), any(EndPhaseController.class))).thenReturn(this.endPhaseControllerMock);
         when(programTaskRunnerFactoryMock.createInstance(StartPhaseTask.class, this.startPhaseControllerMock)).thenReturn(this.startPhaseProgramTaskRunnerMock);
         when(programTaskRunnerFactoryMock.createInstance(EndPhaseTask.class, this.endPhaseControllerMock)).thenReturn(this.endPhaseProgramTaskRunnerMock);
     }
@@ -85,7 +87,7 @@ class MainTest {
         
         Main.main(new String[] {});
         
-        verify(programPhaseControllerFactoryMock).createInstance(StartPhaseController.class);
+        verify(programPhaseControllerFactoryMock).createInstance(eq(StartPhaseController.class), any(StartPhaseController.class));
         verify(this.startPhaseControllerMock).onPhaseBegin();
         verify(programTaskRunnerFactoryMock).createInstance(StartPhaseTask.class, this.startPhaseControllerMock);
         verify(this.startPhaseProgramTaskRunnerMock).runProgramTasks(anyList());
@@ -102,13 +104,13 @@ class MainTest {
 
         Main.main(new String[] {});
 
-        verify(programPhaseControllerFactoryMock).createInstance(StartPhaseController.class);
+        verify(programPhaseControllerFactoryMock).createInstance(eq(StartPhaseController.class), any(StartPhaseController.class));
         verify(this.startPhaseControllerMock).onPhaseBegin();
         verify(programTaskRunnerFactoryMock).createInstance(StartPhaseTask.class, this.startPhaseControllerMock);
         verify(this.startPhaseProgramTaskRunnerMock).runProgramTasks(anyList());
         verify(this.startPhaseControllerMock).onPhaseEnd();
         
-        verify(programPhaseControllerFactoryMock).createInstance(EndPhaseController.class);
+        verify(programPhaseControllerFactoryMock).createInstance(eq(EndPhaseController.class), any(EndPhaseController.class));
         verify(this.endPhaseControllerMock).onPhaseBegin();
         verify(programTaskRunnerFactoryMock).createInstance(EndPhaseTask.class, this.endPhaseControllerMock);
         verify(this.endPhaseProgramTaskRunnerMock).runProgramTasks(anyList());
@@ -125,13 +127,13 @@ class MainTest {
 
         assertThrows(RuntimeException.class, () -> Main.main(new String[] {}));
 
-        verify(programPhaseControllerFactoryMock).createInstance(StartPhaseController.class);
+        verify(programPhaseControllerFactoryMock).createInstance(eq(StartPhaseController.class), any(StartPhaseController.class));
         verify(this.startPhaseControllerMock).onPhaseBegin();
         verify(programTaskRunnerFactoryMock).createInstance(StartPhaseTask.class, this.startPhaseControllerMock);
         verify(this.startPhaseProgramTaskRunnerMock).runProgramTasks(anyList());
         verify(this.startPhaseControllerMock).onPhaseEnd();
 
-        verify(programPhaseControllerFactoryMock).createInstance(EndPhaseController.class);
+        verify(programPhaseControllerFactoryMock).createInstance(eq(EndPhaseController.class), any(EndPhaseController.class));
         verify(this.endPhaseControllerMock).onPhaseBegin();
         verify(programTaskRunnerFactoryMock).createInstance(EndPhaseTask.class, this.endPhaseControllerMock);
         verify(this.endPhaseProgramTaskRunnerMock).runProgramTasks(anyList());

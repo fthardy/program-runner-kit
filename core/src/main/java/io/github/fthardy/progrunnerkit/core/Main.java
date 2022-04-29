@@ -23,7 +23,8 @@ SOFTWARE.
  */
 package io.github.fthardy.progrunnerkit.core;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class provides a generic and extendable main-rountine-implementation. It can be used as entry-point for any kind of JavaSE program.
@@ -37,15 +38,15 @@ public final class Main {
     
     interface ProgramPhaseControllerFactory {
 
-        ProgramPhaseController createInstance(Class<? extends ProgramPhaseController> semanticTypeClass);
+        ProgramPhaseController createInstance(Class<? extends ProgramPhaseController> semanticTypeClass, ProgramPhaseController defaultBehavior);
 
     }
     
     static ProgramTaskRunnerFactory _progamTaskRunnerFactory = (taskTypeClass, phaseController) -> 
             new ProgramTaskRunner(new ServiceImplProvider<>(taskTypeClass).provideImpls(), phaseController);
     
-    static ProgramPhaseControllerFactory _programPhaseControllerFactory = semanticTypeClass ->
-            new AggregateProgramPhaseController(new ServiceImplProvider<>(semanticTypeClass).provideImpls());
+    static ProgramPhaseControllerFactory _programPhaseControllerFactory = (semanticTypeClass, defaultBehaviour) ->
+            new ProgramPhaseControllerAggregator(new ServiceImplProvider<>(semanticTypeClass).provideImpls(), defaultBehaviour);
 
     /**
      * The main-routine providing the entry point for the JVM-Process.
@@ -56,11 +57,11 @@ public final class Main {
      * program ends without processing the end phase.
      * </p>
      * <p>
-     * Each of the two program phases (start- and end-phase) have a {@link ProgramPhaseController} instance of type {@link AggregateProgramPhaseController}.
+     * Each of the two program phases (start- and end-phase) have a {@link ProgramPhaseController} instance of type {@link ProgramPhaseControllerAggregator}.
      * A {@link ProgramPhaseController} provides a set of call back methods. These call back methods are going to be invoked during the program execution
      * procedure. There are specific semantic sub type definitions of {@link ProgramPhaseController} for each of the two program phases:
      * {@link StartPhaseController} and {@link EndPhaseController}. It is possible to provide none or many implementations for each of the two semantic sub
-     * types. All implementation instances are collected by a {@link ServiceImplProvider}. The {@link AggregateProgramPhaseController} instance coordinates the
+     * types. All implementation instances are collected by a {@link ServiceImplProvider}. The {@link ProgramPhaseControllerAggregator} instance coordinates the
      * delegation to all available controller instances.
      * </p>
      * <p>
@@ -76,7 +77,8 @@ public final class Main {
         
         boolean startPhaseTasksAvailable = true;
         
-        ProgramPhaseController startPhaseController = _programPhaseControllerFactory.createInstance(StartPhaseController.class);
+        ProgramPhaseController startPhaseController = 
+                _programPhaseControllerFactory.createInstance(StartPhaseController.class, new StartPhaseController() {});
         try {
             startPhaseController.onPhaseBegin();
             
@@ -90,7 +92,8 @@ public final class Main {
             
             if (startPhaseTasksAvailable) {
                 
-                ProgramPhaseController endPhaseController = _programPhaseControllerFactory.createInstance(EndPhaseController.class);
+                ProgramPhaseController endPhaseController =
+                        _programPhaseControllerFactory.createInstance(EndPhaseController.class, new EndPhaseController() {});
                 
                 endPhaseController.onPhaseBegin();
                 

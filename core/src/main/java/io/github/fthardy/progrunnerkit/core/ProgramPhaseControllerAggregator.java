@@ -24,6 +24,7 @@ SOFTWARE.
 package io.github.fthardy.progrunnerkit.core;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * A generic phase controller implementation which aggregates a collection of phase controllers to represent them as one.
@@ -38,15 +39,6 @@ public class ProgramPhaseControllerAggregator implements ProgramPhaseController 
 
     private final Collection<? extends ProgramPhaseController> controllers;
     private final ProgramPhaseController defaultBehaviour;
-    
-    /**
-     * Creates a new instance of this program phase controller.
-     *
-     * @param controllers the controller instances.
-     */
-    public ProgramPhaseControllerAggregator(Collection<? extends ProgramPhaseController> controllers) {
-        this(controllers, null);
-    }
 
     /**
      * Creates a new instance of this program phase controller.
@@ -54,10 +46,9 @@ public class ProgramPhaseControllerAggregator implements ProgramPhaseController 
      * @param controllers the controller instances.
      * @param defaultBehaviour the implementation for the default behaviour. Can be {@code null}.
      */
-    public ProgramPhaseControllerAggregator(Collection<? extends ProgramPhaseController> controllers,
-                                            ProgramPhaseController defaultBehaviour) {
+    public ProgramPhaseControllerAggregator(Collection<? extends ProgramPhaseController> controllers, ProgramPhaseController defaultBehaviour) {
         this.controllers = controllers;
-        this.defaultBehaviour = defaultBehaviour == null ? new ProgramPhaseController() {} : defaultBehaviour;
+        this.defaultBehaviour = Objects.requireNonNull(defaultBehaviour);
     }
 
     @Override

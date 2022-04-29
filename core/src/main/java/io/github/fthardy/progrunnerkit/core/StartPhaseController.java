@@ -34,5 +34,27 @@ package io.github.fthardy.progrunnerkit.core;
  * @see ServiceImplProvider
  */
 public interface StartPhaseController extends ProgramPhaseController {
-    // intentionally empty
+
+    /**
+     * The default implemenation prints a message with the task-identifier and the exception stacktrace and returns
+     * {@code true} to immediately end the start phase.
+     * 
+     * @param fromTaskId the identifier of the start phase task which has thrown the exception.
+     * @param exception the exception thrown by the task.
+     *
+     * @return by default {@code true}.
+     */
+    default boolean onExceptionFromTask(String fromTaskId, RuntimeException exception) {
+        System.out.printf("The start phase task with identifier [%s] has thrown an exception:", fromTaskId);
+        System.out.println("----------------------------------------------------------------------------------------------------");
+        exception.printStackTrace();
+        System.out.println("----------------------------------------------------------------------------------------------------");
+        return true;
+    }
+
+    @Override
+    default void noTaskAvailable() {
+        System.out.println("No tasks found for start phase!");
+        System.out.println();
+    }
 }

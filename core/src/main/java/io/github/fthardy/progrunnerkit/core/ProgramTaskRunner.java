@@ -36,6 +36,7 @@ import java.util.List;
  * </p>
  * 
  * @see ProgramPhaseController
+ * @see ProgramPhaseTaskAggregator
  */
 public class ProgramTaskRunner {
     
@@ -56,22 +57,28 @@ public class ProgramTaskRunner {
      */
     public boolean runProgramTasks(List<String> arguments) {
 
-        boolean tasksAvailable = !this.tasks.isEmpty();
-        if (tasksAvailable) {
-            for (ProgramPhaseTask task : this.tasks) {
-                String identifier = task.getIdentifier();
-                this.phaseController.beforeTaskExecution(identifier);
-                try {
-                    task.run(arguments);
-                } catch (RuntimeException e) {
-                    if (this.phaseController.onExceptionFromTask(identifier, e)) {
-                        break; // end the phase here - any other task of this phase is not going to be run
-                    }
-                } finally {
-                    this.phaseController.afterTaskExecution(identifier);
+        if (this.tasks.isEmpty()) {
+            return false;
+        }
+        
+        for (ProgramPhaseTask task : this.tasks) {
+            
+            if (task instanceof ProgramPhaseTaskAggregator) {
+                ((ProgramPhaseTaskAggregator<?>) task).setProgramPhaseController(this.phaseController);
+            }
+            
+            String identifier = task.getIdentifier();
+            this.phaseController.beforeTaskExecution(identifier);
+            try {
+                task.run(arguments);
+            } catch (RuntimeException e) {
+                if (this.phaseController.onExceptionFromTask(identifier, e)) {
+                    break; // end the phase here - any other task of this phase is not going to be run
                 }
+            } finally {
+                this.phaseController.afterTaskExecution(identifier);
             }
         }
-        return tasksAvailable;
+        return true;
     }
 }

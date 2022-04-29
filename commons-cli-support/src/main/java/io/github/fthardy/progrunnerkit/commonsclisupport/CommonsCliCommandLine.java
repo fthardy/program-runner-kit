@@ -39,6 +39,7 @@ public class CommonsCliCommandLine implements CommandLine {
      * Create a new instance of this command line implementation.
      * 
      * @param parsedCommandLine the command line object returned by the commons-cli parser.
+     * @param args the arguments from the command line.
      */
     public CommonsCliCommandLine(String[] args, org.apache.commons.cli.CommandLine parsedCommandLine) {
         this.commandLineArguments = Arrays.asList(Objects.requireNonNull(args));

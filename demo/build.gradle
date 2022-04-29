@@ -2,6 +2,7 @@ plugins {
 	id 'application'
 	id 'maven-publish'
 }
+
 group 'io.github.fthardy.progrunnerkit'
 version '1.0.0-SNAPSHOT'
 

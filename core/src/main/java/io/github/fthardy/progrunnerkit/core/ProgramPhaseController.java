@@ -59,27 +59,22 @@ public interface ProgramPhaseController {
     
     /**
      * Is called when a program phase task throws an exception.
+     * <p>
+     * Prints a message with the tasks identifier and the stacktrace of the exception and returns {@code false}.
+     * </p>
      *
      * @param fromTaskId the identifier of the task which has thrown the exception.
      * @param exception the exception thrown by the task.
      *                     
-     * @return {@code true} to end the phase immediately. Otherwise {@code false} to continue with the next task of the phase (if there is one).
+     * @return {@code true} to end the phase immediately. Otherwise {@code false} to continue with the next task of the 
+     * phase (if there is one). By default {@code true}.
      * 
      * @see ProgramPhaseTask#getIdentifier()
      */
-    default boolean onExceptionFromTask(String fromTaskId, RuntimeException exception){
-        System.out.printf("The task with identifier [%s] has thrown an exception:", fromTaskId);
-        System.out.println();
-        exception.printStackTrace();
-        System.out.println();
-        return false;
-    }
+    boolean onExceptionFromTask(String fromTaskId, RuntimeException exception);
 
     /**
      * Is called when no task is available for the phase.
      */
-    default void noTaskAvailable(){
-        System.out.println("No tasks found for program phase!");
-        System.out.println();
-    }
+    void noTaskAvailable();
 }
