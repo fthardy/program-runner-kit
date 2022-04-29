@@ -30,10 +30,20 @@ import org.apache.deltaspike.cdise.api.CdiContainerLoader;
 import java.util.List;
 
 /**
- * Default priority is 0.
+ * Shuts the CDI-Container down.
+ * <p>
+ * The default priority for this task is {@value DEFAULT_PRIORITY}.
+ * </p>
  */
 public class DefaultDeltaSpikeCdiContainerShutdownTask implements Prioritized, EndPhaseTask {
     
+    public static final int DEFAULT_PRIORITY = Integer.MAX_VALUE / 2;
+
+    @Override
+    public int getPriority() {
+        return DEFAULT_PRIORITY;
+    }
+
     @Override
     public void run(List<String> arguments) {
         CdiContainerLoader.getCdiContainer().shutdown();

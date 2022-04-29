@@ -30,7 +30,13 @@ import org.apache.deltaspike.core.api.provider.BeanProvider;
 import java.util.List;
 
 /**
- * Default priority is 0.
+ * Starts the application through an {@link ApplicationEntryPoint}.
+ * <p>
+ * The application entry point is retrieved from the {@link BeanProvider} and the {@link ApplicationEntryPoint#run(List)} method is going to be invoked.
+ * </p>
+ * <p>
+ * The default priority of this task is 0.
+ * </p>
  */
 public class DefaultDeltaSpikeCdiApplicationStarterTask implements Prioritized, StartPhaseTask {
 

@@ -31,11 +31,14 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
 
 /**
- * Default priority is {@value DEFAULT_PRIORITY}.
+ * Stops the {@link ApplicationScoped} context.
+ * <p>
+ * The default priority for this task is {@value DEFAULT_PRIORITY}.
+ * </p>
  */
 public class DefaultDeltaSpikeCdiApplicationScopeStopTask implements Prioritized, EndPhaseTask {
 
-    public static final int DEFAULT_PRIORITY = Integer.MIN_VALUE / 2;
+    public static final int DEFAULT_PRIORITY = Integer.MAX_VALUE / 4;
 
     @Override
     public int getPriority() {

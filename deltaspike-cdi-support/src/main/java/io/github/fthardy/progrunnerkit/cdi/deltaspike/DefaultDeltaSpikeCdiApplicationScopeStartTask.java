@@ -31,7 +31,10 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
 
 /**
- * Default priority is {@value DEFAULT_PRIORITY}.
+ * Starts the {@link ApplicationScoped} context.
+ * <p>
+ * The default priority for this task is {@value DEFAULT_PRIORITY}.
+ * </p>
  */
 public class DefaultDeltaSpikeCdiApplicationScopeStartTask implements Prioritized, StartPhaseTask {
 

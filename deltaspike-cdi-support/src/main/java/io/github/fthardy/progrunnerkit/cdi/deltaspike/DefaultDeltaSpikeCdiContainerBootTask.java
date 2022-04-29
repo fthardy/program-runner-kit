@@ -30,7 +30,10 @@ import org.apache.deltaspike.cdise.api.CdiContainerLoader;
 import java.util.List;
 
 /**
- * Default priority is {@value DEFAULT_PRIORITY}.
+ * Boots up the CDI-Container.
+ * <p>
+ * The default priority for this task is {@value DEFAULT_PRIORITY}.
+ * </p>
  */
 public class DefaultDeltaSpikeCdiContainerBootTask implements Prioritized, StartPhaseTask {
     
