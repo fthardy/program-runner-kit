@@ -52,4 +52,10 @@ public interface EndPhaseController extends ProgramPhaseController {
         System.out.println("----------------------------------------------------------------------------------------------------");
         return false;
     }
+
+    @Override
+    default void noTaskAvailable() {
+        System.out.println("No tasks found for end phase!");
+        System.out.println();
+    }
 }
